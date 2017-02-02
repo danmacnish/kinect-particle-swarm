@@ -2,8 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    //set OF log level
+    ofSetLogLevel(OF_LOG_WARNING);
     
-    //load the kinect frames
+    //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
     
     for(int i=0; i < 544; i++){
@@ -29,7 +31,11 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(0);
     images[index].draw(0, 0);
-
+    
+    //write framerate and other info to screen
+    stringstream ss;
+    ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
+    ofDrawBitmapString(ss.str().c_str(), 700, 50);
 }
 
 //--------------------------------------------------------------

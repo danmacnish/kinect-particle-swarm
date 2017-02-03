@@ -9,25 +9,23 @@
 #ifndef particle_h
 #define particle_h
 
-#include "ofApp.h"
+#include "ofMain.h"
 
 class particle {
-    int pos_x;
-    int pos_y;
-    int vel_x;
-    int vel_y;
-    int p_x;
-    int p_y;
+    ofPoint pos;
+    ofPoint vel;
+    ofPoint p;
     float v_scalar;
     float p_scalar;
     int x_lim;
     int y_lim;
+    int size;
     
 public:
     particle(int x, int y);
-    void update(ofImage *image);
+    void update(const ofImage &image);
+    void draw(void);
     ~particle();
-    
 };
 
 

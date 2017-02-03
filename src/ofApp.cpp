@@ -15,14 +15,26 @@ void ofApp::setup(){
         ofLoadImage(images[i].getPixels(), filePath);
     }
     
+    //init particles
+    for(int i = 0; i < num_particles; ++i) {
+        particle p(639,479);
+        particles.push_back(p);
+    }
+    
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if (ofGetElapsedTimeMillis() % 3)
+    if (ofGetElapsedTimeMillis() % 21)
     {
         index++;
         if (index > images.size()-1) index = 0;
+        
+        //update particles
+        for(auto it = particles.begin(); it != particles.end(); ++it) {
+            it->update(images[index]);
+        }
     }
 
 }
@@ -31,6 +43,11 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(0);
     images[index].draw(0, 0);
+    
+    //draw the particles
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->draw();
+    }
     
     //write framerate and other info to screen
     stringstream ss;

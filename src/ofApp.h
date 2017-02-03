@@ -4,6 +4,7 @@
 #include "ofxGif.h"
 #include "ofxOpenCv.h"
 #include "particle.h"
+#include <vector>
 
 class ofApp : public ofBaseApp{
 
@@ -29,6 +30,7 @@ class ofApp : public ofBaseApp{
         //vector<ofxCvGrayscaleImage> images;
         vector<ofImage> images;
         int index = 0;
-        vector<particle> particles[100];
+        vector<particle> particles;
+        int num_particles = 5;
 		
 };

@@ -26,17 +26,16 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if (ofGetElapsedTimeMillis() % 21)
+    //index frames
+    if (ofGetElapsedTimeMillis() % 3)
     {
         index++;
         if (index > images.size()-1) index = 0;
-        
-        //update particles
-        for(auto it = particles.begin(); it != particles.end(); ++it) {
-            it->update(images[index]);
-        }
     }
-
+    //update particles
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->update(images[index]);
+    }
 }
 
 //--------------------------------------------------------------
@@ -52,6 +51,7 @@ void ofApp::draw(){
     //write framerate and other info to screen
     stringstream ss;
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
+    ss << ofRandom(-1,1) << endl;
     ofDrawBitmapString(ss.str().c_str(), 700, 50);
 }
 

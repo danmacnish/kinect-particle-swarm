@@ -13,12 +13,12 @@
 particle::particle(int x, int y) : x_lim(x), y_lim(y) {
     pos.x = ofRandom(0, x_lim);
     pos.y = ofRandom(0, y_lim);
-    vel_lim = 10;
+    vel_lim = 15;
     size = 5;
     vel.x = static_cast<int>(ofRandom(-5, 5));
     vel.y = static_cast<int>(ofRandom(-5, 5));
     p = pos; //initialise best known position as current position
-    v_scalar = 7;
+    v_scalar = 15;
     p_scalar = 1;
 }
 
@@ -59,6 +59,15 @@ void particle::update(const ofImage &image) {
 void particle::draw(void) {
     ofSetColor(208, 255, 63);
     ofDrawCircle(pos, size);
+}
+
+void particle::reset(void) {
+    //re spawn particles in new positions with new velocities
+    pos.x = ofRandom(0, x_lim);
+    pos.y = ofRandom(0, y_lim);
+    vel.x = static_cast<int>(ofRandom(-5, 5));
+    vel.y = static_cast<int>(ofRandom(-5, 5));
+    p = pos; //initialise best known position as current position
 }
 
 particle::~particle() {

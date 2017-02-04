@@ -31,6 +31,6 @@ class ofApp : public ofBaseApp{
         vector<ofImage> images;
         int index = 0;
         vector<particle> particles;
-        int num_particles = 5;
+        int num_particles = 20;
 		
 };

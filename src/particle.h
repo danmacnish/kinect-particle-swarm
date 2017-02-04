@@ -26,6 +26,7 @@ public:
     particle(int x, int y);
     void update(const ofImage &image);
     void draw(void);
+    void reset(void);
     ~particle();
 };
 

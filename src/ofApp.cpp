@@ -8,7 +8,7 @@ void ofApp::setup(){
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
     
-    for(int i=0; i < 544; i++){
+    for(int i=0; i < 530; i++){
         string filePath = path + to_string(i) + ".png";
         images.push_back(ofImage());
         images[i].allocate(640,480,OF_IMAGE_GRAYSCALE);
@@ -52,13 +52,18 @@ void ofApp::draw(){
     //write framerate and other info to screen
     stringstream ss;
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
-    ss << ofRandom(-1,1) << endl;
+    ss << "press r to reset particles" << endl;
     ofDrawBitmapString(ss.str().c_str(), 700, 50);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if(key == 'r') {
+        //reset particles
+        for(auto it = particles.begin(); it != particles.end(); ++it) {
+            it->reset();
+        }
+    }
 }
 
 //--------------------------------------------------------------

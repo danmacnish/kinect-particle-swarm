@@ -20,6 +20,7 @@ class particle {
     int x_lim;
     int y_lim;
     int size;
+    float vel_lim;
     
 public:
     particle(int x, int y);

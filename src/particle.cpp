@@ -23,9 +23,9 @@ particle::particle(int x, int y) : x_lim(x), y_lim(y) {
 
 //update particle position
 void particle::update(const ofImage &image) {
-    float r = ofRandom(-1,1);
     //update velocity
-    vel += r*v_scalar*(p - pos);
+    vel.x += ofRandom(-1,1)*v_scalar*(p.x - pos.x);
+    vel.y += ofRandom(-1,1)*v_scalar*(p.y - pos.y);
     //update position
     pos += vel;
     //limit the particle to stay within bounds
@@ -47,7 +47,7 @@ void particle::update(const ofImage &image) {
     //if new position is better than old position, update p
     ofColor newVal = image.getColor(pos.x, pos.y);
     ofColor oldVal = image.getColor(p.x, p.y);
-    if(newVal.getBrightness() >= oldVal.getBrightness()) {
+    if(newVal.getBrightness() < oldVal.getBrightness()) {
         p = pos;
     };
 }

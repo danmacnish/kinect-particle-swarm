@@ -41,6 +41,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(0);
+    ofSetColor(255,255,255);
     images[index].draw(0, 0);
     
     //draw the particles

@@ -13,20 +13,20 @@
 particle::particle(int x, int y) : x_lim(x), y_lim(y) {
     pos.x = ofRandom(0, x_lim);
     pos.y = ofRandom(0, y_lim);
-    vel_lim = 5;
+    vel_lim = 10;
     size = 5;
     vel.x = static_cast<int>(ofRandom(-5, 5));
     vel.y = static_cast<int>(ofRandom(-5, 5));
     p = pos; //initialise best known position as current position
-    v_scalar = 1;
+    v_scalar = 7;
     p_scalar = 1;
 }
 
 //update particle position
 void particle::update(const ofImage &image) {
     //update velocity
-    vel.x += ofRandom(-1,1)*v_scalar*(p.x - pos.x);
-    vel.y += ofRandom(-1,1)*v_scalar*(p.y - pos.y);
+    vel.x += ofRandom(0,1)*v_scalar*(p.x - pos.x);
+    vel.y += ofRandom(0,1)*v_scalar*(p.y - pos.y);
     //limit velocity
     vel.limit(vel_lim);
     //update position
@@ -50,7 +50,7 @@ void particle::update(const ofImage &image) {
     //if new position is better than old position, update p
     ofColor newVal = image.getColor(pos.x, pos.y);
     ofColor oldVal = image.getColor(p.x, p.y);
-    if(newVal.getBrightness() < oldVal.getBrightness()) {
+    if(newVal.getBrightness() > oldVal.getBrightness()) {
         p = pos;
     };
 }

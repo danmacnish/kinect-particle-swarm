@@ -27,6 +27,9 @@ class ofApp : public ofBaseApp{
         vector<ofImage> images;
         int index = 0;
         vector<particle> particles;
+        //global best known position, passed to each particle
+        ofPoint globalBestPosition;
+        //number of particles
         int num_particles = 20;
 		
 };

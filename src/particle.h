@@ -15,7 +15,8 @@ class particle {
     ofPoint pos;
     ofPoint vel;
     ofPoint p;
-    float v_scalar;
+    float v_scalar1;
+    float v_scalar2;
     float p_scalar;
     int x_lim;
     int y_lim;
@@ -24,7 +25,7 @@ class particle {
     
 public:
     particle(int x, int y);
-    void update(const ofImage &image);
+    void update(const ofImage &image, ofPoint &global);
     void draw(void);
     void reset(void);
     ~particle();

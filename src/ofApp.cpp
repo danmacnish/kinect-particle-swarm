@@ -24,6 +24,10 @@ void ofApp::setup(){
         particles.push_back(p);
     }
     
+    //init global best position
+    globalBestPosition.x = ofRandom(0,639);
+    globalBestPosition.y = ofRandom(0,479);
+    
     
 }
 
@@ -37,7 +41,7 @@ void ofApp::update(){
     }
     //update particles
     for(auto it = particles.begin(); it != particles.end(); ++it) {
-        it->update(images[index]);
+        it->update(images[index], globalBestPosition);
     }
 }
 

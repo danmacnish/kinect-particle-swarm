@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGif.h"
 #include "ofxOpenCv.h"
 #include "particle.h"
 #include <vector>
@@ -25,9 +24,6 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-        ofVideoPlayer video;
-        ofxGIF::fiGifLoader gif;
-        //vector<ofxCvGrayscaleImage> images;
         vector<ofImage> images;
         int index = 0;
         vector<particle> particles;

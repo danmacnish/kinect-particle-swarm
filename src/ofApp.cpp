@@ -5,6 +5,9 @@ void ofApp::setup(){
     //set OF log level
     ofSetLogLevel(OF_LOG_WARNING);
     
+    //seed random number generator
+    ofSeedRandom();
+    
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
     

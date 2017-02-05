@@ -21,8 +21,8 @@ particle::particle(int x, int y) : x_lim(x), y_lim(y) {
     vel.x = static_cast<int>(ofRandom(-5, 5));
     vel.y = static_cast<int>(ofRandom(-5, 5));
     p = pos; //initialise best known position as current position
-    v_scalar1 = 15; //scales distance from particle to local best position
-    v_scalar2 = 5; //scales distance from particle to global best position
+    v_scalar1 = 1; //scales distance from particle to local best position
+    v_scalar2 = 0.1; //scales distance from particle to global best position
     p_scalar = 1;
 }
 

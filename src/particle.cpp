@@ -33,7 +33,7 @@ particle::particle(int x, int y) : x_lim(x), y_lim(y) {
 void particle::update(const ofImage &image, ofPoint &global) {
     //update velocity
     vel.x += ofRandom(0,1)*v_scalar1*(p.x - pos.x) + ofRandom(0,1)*v_scalar2*(global.x - pos.x);
-    vel.y += ofRandom(0,1)*v_scalar1*(p.y - pos.y)+ ofRandom(0,1)*v_scalar2*(global.x - pos.x);;
+    vel.y += ofRandom(0,1)*v_scalar1*(p.y - pos.y)+ ofRandom(0,1)*v_scalar2*(global.y - pos.y);;
     //limit velocity
     vel.limit(vel_lim);
     //update position

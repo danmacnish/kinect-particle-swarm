@@ -18,6 +18,7 @@ class particle {
     float v_scalar1;
     float v_scalar2;
     float p_scalar;
+    float unique_val; //allows us to make each particle slightly different
     int x_lim;
     int y_lim;
     int size;

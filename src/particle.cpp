@@ -14,15 +14,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 particle::particle(int x, int y) : x_lim(x), y_lim(y) {
+    unique_val = ofRandom(-10000,10000);
     pos.x = ofRandom(0, x_lim);
     pos.y = ofRandom(0, y_lim);
-    vel_lim = 15;
+    vel_lim = 10;
     size = 5;
     vel.x = static_cast<int>(ofRandom(-5, 5));
     vel.y = static_cast<int>(ofRandom(-5, 5));
     p = pos; //initialise best known position as current position
-    v_scalar1 = 1; //scales distance from particle to local best position
-    v_scalar2 = 0.1; //scales distance from particle to global best position
+    v_scalar1 = 0.5; //scales distance from particle to local best position
+    v_scalar2 = 1; //scales distance from particle to global best position
     p_scalar = 1;
 }
 
@@ -32,8 +33,10 @@ particle::particle(int x, int y) : x_lim(x), y_lim(y) {
 
 void particle::update(const ofImage &image, ofPoint &global) {
     //update velocity
-    vel.x += ofRandom(0,1)*v_scalar1*(p.x - pos.x) + ofRandom(0,1)*v_scalar2*(global.x - pos.x);
-    vel.y += ofRandom(0,1)*v_scalar1*(p.y - pos.y)+ ofRandom(0,1)*v_scalar2*(global.y - pos.y);;
+    float r1 = ofNoise(unique_val, pos.y * 1, ofGetElapsedTimef() * 0.6);
+    float r2 = ofNoise(unique_val, pos.x * 1, ofGetElapsedTimef() * 0.6);
+    vel.x += r1*(v_scalar1*(p.x - pos.x) + v_scalar2*(global.x - pos.x));
+    vel.y += r2*(v_scalar1*(p.y - pos.y) + v_scalar2*(global.y - pos.y));
     //limit velocity
     vel.limit(vel_lim);
     //update position

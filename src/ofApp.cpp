@@ -8,6 +8,20 @@ void ofApp::setup(){
     //seed random number generator
     ofSeedRandom();
     
+    //set listener methods for gui sliders
+    scalar1.addListener(this, &ofApp::scalar1Changed);
+    scalar2.addListener(this, &ofApp::scalar2Changed);
+    velocityLimit.addListener(this, &ofApp::velocityLimitChanged);
+    particleSize.addListener(this, &ofApp::particleSizeChanged);
+    
+    //init gui
+    gui.setup("particle settings", "particle settings", 700, 200);
+    //add slider for scalar 1, init slider to 0.5, range 0 to 20
+    gui.add(scalar1.setup("scalar 1 (local position weighting)", 0.5, 0, 20));
+    gui.add(scalar2.setup("scalar 2 (global position weighting)", 1.0, 0, 20));
+    gui.add(velocityLimit.setup("velocity limit", 10, 1, 50));
+    gui.add(particleSize.setup("particle size", 5, 1, 20));
+    
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
     
@@ -17,12 +31,14 @@ void ofApp::setup(){
         images[i].allocate(640,480,OF_IMAGE_GRAYSCALE);
         ofLoadImage(images[i].getPixels(), filePath);
     }
+    ofLogNotice() << "loaded images";
     
     //init particles
     for(int i = 0; i < num_particles; ++i) {
         particle p(639,479);
         particles.push_back(p);
     }
+    ofLogNotice() << "initialised particles";
     
     //init global best position
     globalBestPosition.x = ofRandom(0,639);
@@ -61,6 +77,8 @@ void ofApp::draw(){
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
     ss << "press r to reset particles" << endl;
     ofDrawBitmapString(ss.str().c_str(), 700, 50);
+    
+    gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -70,6 +88,38 @@ void ofApp::keyPressed(int key){
         for(auto it = particles.begin(); it != particles.end(); ++it) {
             it->reset();
         }
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::scalar1Changed(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setScalar1(val);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::scalar2Changed(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setScalar2(val);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::velocityLimitChanged(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setVelocityLimit(val);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::particleSizeChanged(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setParticleSize(static_cast<int>(val));
     }
 }
 

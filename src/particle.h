@@ -12,9 +12,10 @@
 #include "ofMain.h"
 
 class particle {
-    ofPoint pos;
+    ofPoint current_pos;
+    ofPoint magnet_pos;
     ofPoint vel;
-    ofPoint p;
+    ofPoint disturbance;
     float v_scalar1;
     float v_scalar2;
     float p_scalar;
@@ -25,12 +26,18 @@ class particle {
     float vel_lim;
     
 public:
+    //constructor, pass in x and y position limits
     particle(int x, int y);
-    //set and get methods
+    //set methods
     void setScalar1(float val);
     void setScalar2(float val);
     void setVelocityLimit(float val);
     void setParticleSize(int val);
+    
+    //get methods
+    const ofPoint &getCurrentPosition(void);
+    
+    
     void update(const ofImage &image, ofPoint &global);
     void draw(void);
     void reset(void);

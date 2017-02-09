@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "particle.h"
+#include "ofxGui.h"
 #include <vector>
 
 class ofApp : public ofBaseApp{
@@ -23,13 +24,25 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+        //gui callback methods
+        void scalar1Changed(float &val);
+        void scalar2Changed(float &val);
+        void velocityLimitChanged(float &val);
+        void particleSizeChanged(float &val);
 
         vector<ofImage> images;
         int index = 0;
+    
+        //particles
         vector<particle> particles;
-        //global best known position, passed to each particle
-        ofPoint globalBestPosition;
-        //number of particles
-        int num_particles = 20;
+        ofPoint globalBestPosition; //global best known position, passed to each particle
+        int num_particles = 20; //number of particles
+    
+        //gui
+        ofxFloatSlider scalar1;
+        ofxFloatSlider scalar2;
+        ofxFloatSlider velocityLimit;
+        ofxFloatSlider particleSize;
+        ofxPanel gui;
 		
 };

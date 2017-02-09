@@ -10,63 +10,51 @@
 #include "particle.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-//constructor, initialises particle at random position from 0,0 to x,y
+//constructor, initialises particle at random Position from 0,0 to x,y
 ///////////////////////////////////////////////////////////////////////////////
 
-particle::particle(int x, int y) : x_lim(x), y_lim(y) {
-    unique_val = ofRandom(-10000,10000);
-    pos.x = ofRandom(0, x_lim);
-    pos.y = ofRandom(0, y_lim);
-    vel_lim = 10;
+particle::particle(int x, int y) : xLim(x), yLim(y) {
+    uniqueVal = ofRandom(-10000,10000);
+    anchorPos.x = ofRandom(0, xLim);
+    anchorPos.y = ofRandom(0, yLim);
+    currentPos = anchorPos; //initialise particle at anchor currentPosition
+    vel.set(0,0);
+    velLim = 10;
     size = 5;
-    vel.x = static_cast<int>(ofRandom(-5, 5));
-    vel.y = static_cast<int>(ofRandom(-5, 5));
-    p = pos; //initialise best known position as current position
-    v_scalar1 = 0.5; //scales distance from particle to local best position
-    v_scalar2 = 1; //scales distance from particle to global best position
+    v_scalar1 = 0.5; //scales distance from particle to local best currentPosition
+    v_scalar2 = 1; //scales distance from particle to global best currentPosition
     p_scalar = 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//update particle position, based on depth data & global best position
+//update particle currentPosition, based on depth data & global best currentPosition
 ///////////////////////////////////////////////////////////////////////////////
 
-void particle::update(const ofImage &image, ofPoint &global) {
+void particle::update(const ofImage &image, ofVec2f &disturb) {
     //update velocity
-    float r1 = ofNoise(unique_val, pos.y * 1, ofGetElapsedTimef() * 0.6);
-    float r2 = ofNoise(unique_val, pos.x * 1, ofGetElapsedTimef() * 0.6);
-    vel.x += r1*(v_scalar1*(p.x - pos.x) + v_scalar2*(global.x - pos.x));
-    vel.y += r2*(v_scalar1*(p.y - pos.y) + v_scalar2*(global.y - pos.y));
+    //float r1 = ofNoise(uniqueVal, currentPos.y * 1, ofGetElapsedTimef() * 0.6);
+    //float r2 = ofNoise(uniqueVal, currentPos.x * 1, ofGetElapsedTimef() * 0.6);
+
     //limit velocity
-    vel.limit(vel_lim);
-    //update position
-    pos += vel;
+    vel.limit(velLim);
+    //update currentPosition
+    currentPos += vel;
     //limit the particle to stay within bounds
-    if( pos.x > x_lim ){
-        pos.x = x_lim;
+    if( currentPos.x > xLim ){
+        currentPos.x = xLim;
         vel.x *= -1.0;
-    }else if( pos.x < 0 ){
-        pos.x = 0;
+    }else if( currentPos.x < 0 ){
+        currentPos.x = 0;
         vel.x *= -1.0;
     }
-    if( pos.y > y_lim ){
-        pos.y = y_lim;
+    if( currentPos.y > yLim ){
+        currentPos.y = yLim;
         vel.y *= -1.0;
     }
-    else if( pos.y < 0 ){
-        pos.y = 0;
+    else if( currentPos.y < 0 ){
+        currentPos.y = 0;
         vel.y *= -1.0;
     }
-    //update best known position if new position is better
-    ofColor newVal = image.getColor(pos.x, pos.y);
-    ofColor localBest = image.getColor(p.x, p.y);
-    ofColor globalBest = image.getColor(global.x, global.y);
-    if(newVal.getBrightness() > localBest.getBrightness()) {
-        p = pos; //new local best is current position
-        if(localBest.getBrightness() > globalBest.getBrightness()) {
-            global = p; //update global best if local best is better
-        }
-    };
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -75,20 +63,27 @@ void particle::update(const ofImage &image, ofPoint &global) {
 
 void particle::draw(void) {
     ofSetColor(208, 255, 63);
-    ofDrawCircle(pos, size);
+    ofDrawCircle(currentPos, size);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//reset particle positions
+//reset particle currentPositions
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::reset(void) {
-    //re spawn particles in new positions with new velocities
-    pos.x = ofRandom(0, x_lim);
-    pos.y = ofRandom(0, y_lim);
-    vel.x = static_cast<int>(ofRandom(-5, 5));
-    vel.y = static_cast<int>(ofRandom(-5, 5));
-    p = pos; //initialise best known position as current position
+    //re spawn particles in new currentPositions with new velocities
+    currentPos.x = ofRandom(0, xLim);
+    currentPos.y = ofRandom(0, yLim);
+    vel.x = 0;
+    vel.y = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//get reference to current particle position
+///////////////////////////////////////////////////////////////////////////////
+
+const ofVec2f &particle::getCurrentPosition(void) {
+    return currentPos;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +107,7 @@ void particle::setScalar2(float val) {
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::setVelocityLimit(float val) {
-    vel_lim = val;
+    velLim = val;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

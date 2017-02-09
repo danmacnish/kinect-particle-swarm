@@ -35,7 +35,6 @@ class ofApp : public ofBaseApp{
     
         //particles
         vector<particle> particles;
-        ofPoint globalBestPosition; //global best known position, passed to each particle
         int num_particles = 20; //number of particles
     
         //gui

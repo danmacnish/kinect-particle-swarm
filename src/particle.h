@@ -12,18 +12,19 @@
 #include "ofMain.h"
 
 class particle {
-    ofPoint current_pos;
-    ofPoint magnet_pos;
-    ofPoint vel;
-    ofPoint disturbance;
+    ofVec2f currentPos; //the current position
+    ofVec2f anchorPos; //the position the particle tries to maintain
+    ofVec2f vel; //particle velocity
+    ofVec2f disturbance; //the disturbance vector (sum of gradients to nearest particles)
     float v_scalar1;
     float v_scalar2;
     float p_scalar;
-    float unique_val; //allows us to make each particle slightly different
-    int x_lim;
-    int y_lim;
+    float uniqueVal; //allows us to make each particle slightly different
     int size;
-    float vel_lim;
+    //position and velocity limits
+    int xLim;
+    int yLim;
+    float velLim;
     
 public:
     //constructor, pass in x and y position limits
@@ -35,10 +36,10 @@ public:
     void setParticleSize(int val);
     
     //get methods
-    const ofPoint &getCurrentPosition(void);
+    const ofVec2f &getCurrentPosition(void);
     
     
-    void update(const ofImage &image, ofPoint &global);
+    void update(const ofImage &image, ofVec2f &global);
     void draw(void);
     void reset(void);
     ~particle();

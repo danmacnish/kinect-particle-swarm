@@ -40,10 +40,6 @@ void ofApp::setup(){
     }
     ofLogNotice() << "initialised particles";
     
-    //init global best position
-    globalBestPosition.x = ofRandom(0,639);
-    globalBestPosition.y = ofRandom(0,479);
-    
     
 }
 

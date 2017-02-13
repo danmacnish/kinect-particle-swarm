@@ -30,6 +30,7 @@ public:
     //constructor, pass in x and y position limits
     particle(int x, int y);
     //set methods
+    void setDisturbanceVector(ofVec2f vect);
     void setScalar1(float val);
     void setScalar2(float val);
     void setVelocityLimit(float val);

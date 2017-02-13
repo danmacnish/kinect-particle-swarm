@@ -53,7 +53,7 @@ void ofApp::update(){
     }
     //update particles
     for(auto it = particles.begin(); it != particles.end(); ++it) {
-        it->update(images[index], globalBestPosition);
+        it->update(images[index]);
     }
 }
 

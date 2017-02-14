@@ -35,7 +35,10 @@ void particle::update(const ofImage &image) {
     //update velocity
     //float r1 = ofNoise(uniqueVal, currentPos.y * 1, ofGetElapsedTimef() * 0.6);
     //float r2 = ofNoise(uniqueVal, currentPos.x * 1, ofGetElapsedTimef() * 0.6);
-
+    
+    //calculate gradient vector around particle
+    calculateGradientVector(image);
+    
     //limit velocity
     vel.limit(velLim);
     //update currentPosition
@@ -77,6 +80,14 @@ void particle::reset(void) {
     currentPos.y = ofRandom(0, yLim);
     vel.x = 0;
     vel.y = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//get reference to current particle position
+///////////////////////////////////////////////////////////////////////////////
+
+void calculateGradientVector(const ofImage &image) {
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////

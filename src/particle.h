@@ -15,7 +15,7 @@ class particle {
     ofVec2f currentPos; //the current position
     ofVec2f anchorPos; //the position the particle tries to maintain
     ofVec2f vel; //particle velocity
-    ofVec2f disturbance; //the disturbance vector (gradient around particle)
+    ofVec2f gradient; //the disturbance vector (gradient around particle)
     int gRadius; //used when calculating gradient around particle. larger value means gradient will be calculated over a larger distance
     float v_scalar1;
     float v_scalar2;
@@ -45,6 +45,10 @@ public:
     void draw(void);
     void reset(void);
     ~particle();
+
+private:
+    //calculate gradient vector for particle (i.e. disturbance vector). called inside update()
+    void calculateGradientVector(const ofImage &image);
 };
 
 

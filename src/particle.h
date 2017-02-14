@@ -15,7 +15,8 @@ class particle {
     ofVec2f currentPos; //the current position
     ofVec2f anchorPos; //the position the particle tries to maintain
     ofVec2f vel; //particle velocity
-    ofVec2f disturbance; //the disturbance vector (sum of gradients to nearest particles)
+    ofVec2f disturbance; //the disturbance vector (gradient around particle)
+    int gRadius; //used when calculating gradient around particle. larger value means gradient will be calculated over a larger distance
     float v_scalar1;
     float v_scalar2;
     float p_scalar;
@@ -30,7 +31,7 @@ public:
     //constructor, pass in x and y position limits
     particle(int x, int y);
     //set methods
-    void setDisturbanceVector(ofVec2f vect);
+    void setGradientRadius(int val);
     void setScalar1(float val);
     void setScalar2(float val);
     void setVelocityLimit(float val);
@@ -40,7 +41,7 @@ public:
     const ofVec2f &getCurrentPosition(void);
     
     
-    void update(const ofImage &image, ofVec2f &global);
+    void update(const ofImage &image);
     void draw(void);
     void reset(void);
     ~particle();

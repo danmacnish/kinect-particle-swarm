@@ -21,6 +21,7 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     vel.set(0,0);
     velLim = 10;
     size = 5;
+    gRadius = 10;
     v_scalar1 = 0.5; //scales distance from particle to local best currentPosition
     v_scalar2 = 1; //scales distance from particle to global best currentPosition
     p_scalar = 1;
@@ -30,7 +31,7 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
 //update particle currentPosition, based on depth data & global best currentPosition
 ///////////////////////////////////////////////////////////////////////////////
 
-void particle::update(const ofImage &image, ofVec2f &disturb) {
+void particle::update(const ofImage &image) {
     //update velocity
     //float r1 = ofNoise(uniqueVal, currentPos.y * 1, ofGetElapsedTimef() * 0.6);
     //float r2 = ofNoise(uniqueVal, currentPos.x * 1, ofGetElapsedTimef() * 0.6);
@@ -87,11 +88,11 @@ const ofVec2f &particle::getCurrentPosition(void) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//set disturbance vector
+//set radius of gradient calculation
 ///////////////////////////////////////////////////////////////////////////////
 
-void particle::setDisturbanceVector(ofVec2f vect) {
-    disturbance = vect;
+void particle::setGradientRadius(int val) {
+    gRadius = val;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

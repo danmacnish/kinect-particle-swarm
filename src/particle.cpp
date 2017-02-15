@@ -25,6 +25,7 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     v_scalar1 = 0.5; //scales distance from particle to local best currentPosition
     v_scalar2 = 1; //scales distance from particle to global best currentPosition
     p_scalar = 1;
+    g_scalar = 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,7 +88,18 @@ void particle::reset(void) {
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::calculateGradientVector(const ofImage &image) {
-    
+    //get the current z value
+    ofColor col = image.getColor(currentPos.x, currentPos.y);
+    currentZ = col.getBrightness();
+    //get the z value of four points around particle
+    ofColor Pleft = image.getColor(currentPos.x - gRadius, currentPos.y);
+    ofColor Pright = image.getColor(currentPos.x + gRadius, currentPos.y);
+    ofColor Pup = image.getColor(currentPos.x, currentPos.y - gRadius);
+    ofColor Pdown = image.getColor(currentPos.x, currentPos.y + gRadius);
+    //calculate x and y components of gradient vector based on four values around particle
+    //g scalar adjusts size of vector
+    gradient.x = currentPos.x + g_scalar * (-(currentZ - Pleft.getBrightness())/gRadius + (currentZ - Pright.getBrightness())/gRadius);
+    gradient.y = currentPos.y + g_scalar * (-(currentZ - Pup.getBrightness())/gRadius + (currentZ - Pdown.getBrightness())/gRadius);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

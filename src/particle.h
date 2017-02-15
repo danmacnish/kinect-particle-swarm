@@ -13,6 +13,7 @@
 
 class particle {
     ofVec2f currentPos; //the current position
+    
     ofVec2f anchorPos; //the position the particle tries to maintain
     ofVec2f vel; //particle velocity
     ofVec2f gradient; //the disturbance vector (gradient around particle)

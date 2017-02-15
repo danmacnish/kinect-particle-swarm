@@ -86,7 +86,7 @@ void particle::reset(void) {
 //get reference to current particle position
 ///////////////////////////////////////////////////////////////////////////////
 
-void calculateGradientVector(const ofImage &image) {
+void particle::calculateGradientVector(const ofImage &image) {
     
 }
 

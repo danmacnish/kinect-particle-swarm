@@ -13,14 +13,16 @@ void ofApp::setup(){
     scalar2.addListener(this, &ofApp::scalar2Changed);
     velocityLimit.addListener(this, &ofApp::velocityLimitChanged);
     particleSize.addListener(this, &ofApp::particleSizeChanged);
+    gradientRadius.addListener(this, &ofApp::gradientRadiusChanged);
     
     //init gui
     gui.setup("particle settings", "particle settings", 700, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
-    gui.add(scalar1.setup("scalar 1 (local position weighting)", 0.5, 0, 20));
-    gui.add(scalar2.setup("scalar 2 (global position weighting)", 1.0, 0, 20));
+    gui.add(scalar1.setup("scalar 1 (local position weighting)", 0.5, 0, 5));
+    gui.add(scalar2.setup("scalar 2 (global position weighting)", 1.0, 0, 5));
     gui.add(velocityLimit.setup("velocity limit", 10, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
+    gui.add(gradientRadius.setup("gradient radius", 10, 1, 30));
     
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
@@ -116,6 +118,14 @@ void ofApp::particleSizeChanged(float &val) {
     //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
     for(auto it = particles.begin(); it != particles.end(); ++it) {
         it->setParticleSize(static_cast<int>(val));
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::gradientRadiusChanged(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setGradientRadius(static_cast<int>(val));
     }
 }
 

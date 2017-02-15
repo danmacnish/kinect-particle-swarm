@@ -29,17 +29,19 @@ class ofApp : public ofBaseApp{
         void scalar2Changed(float &val);
         void velocityLimitChanged(float &val);
         void particleSizeChanged(float &val);
+        void gradientRadiusChanged(float &val);
 
         vector<ofImage> images;
         int index = 0;
     
         //particles
         vector<particle> particles;
-        int num_particles = 20; //number of particles
+        int num_particles = 5; //number of particles
     
         //gui
         ofxFloatSlider scalar1;
         ofxFloatSlider scalar2;
+        ofxFloatSlider gradientRadius;
         ofxFloatSlider velocityLimit;
         ofxFloatSlider particleSize;
         ofxPanel gui;

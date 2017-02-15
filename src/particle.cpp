@@ -40,8 +40,8 @@ void particle::update(const ofImage &image) {
     calculateGradientVector(image);
     
     //calculate velocity of particle based on gradient and distance from anchor position
-    vel.x = v_scalar1*gradient.x + v_scalar2*(currentPos.x - anchorPos.x);
-    vel.y = v_scalar1*gradient.y + v_scalar2*(currentPos.y - anchorPos.y);
+    vel.x = v_scalar1*gradient.x + v_scalar2*(anchorPos.x - currentPos.x);
+    vel.y = v_scalar1*gradient.y + v_scalar2*(anchorPos.y - currentPos.y);
     //limit velocity
     vel.limit(velLim);
     //update currentPosition
@@ -81,6 +81,7 @@ void particle::reset(void) {
     //re spawn particles in new currentPositions with new velocities
     currentPos.x = ofRandom(0, xLim);
     currentPos.y = ofRandom(0, yLim);
+    anchorPos = currentPos;
     vel.x = 0;
     vel.y = 0;
 }
@@ -100,8 +101,8 @@ void particle::calculateGradientVector(const ofImage &image) {
     ofColor Pdown = image.getColor(currentPos.x, currentPos.y + gRadius);
     //calculate x and y components of gradient vector based on four values around particle
     //g scalar adjusts size of vector
-    gradient.x = (-(currentZ - Pleft.getBrightness())/gRadius + (currentZ - Pright.getBrightness())/gRadius);
-    gradient.y = (-(currentZ - Pup.getBrightness())/gRadius + (currentZ - Pdown.getBrightness())/gRadius);
+    gradient.x = (-(currentZ - Pleft.getBrightness())/gRadius) + ((currentZ - Pright.getBrightness())/gRadius);
+    gradient.y = (-(currentZ - Pup.getBrightness())/gRadius) + ((currentZ - Pdown.getBrightness())/gRadius);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

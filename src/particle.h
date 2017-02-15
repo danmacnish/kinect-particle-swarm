@@ -18,7 +18,6 @@ class particle {
     ofVec2f vel; //particle velocity
     ofVec2f gradient; //the disturbance vector (gradient around particle)
     int gRadius; //used when calculating gradient around particle. larger value means gradient will be calculated over a larger distance
-    float g_scalar;
     float v_scalar1;
     float v_scalar2;
     float p_scalar;

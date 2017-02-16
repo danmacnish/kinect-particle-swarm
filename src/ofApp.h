@@ -36,7 +36,7 @@ class ofApp : public ofBaseApp{
     
         //particles
         vector<particle> particles;
-        int num_particles = 5; //number of particles
+        int num_particles = 30; //number of particles
     
         //gui
         ofxFloatSlider scalar1;

@@ -95,10 +95,10 @@ void particle::calculateGradientVector(const ofImage &image) {
     ofColor col = image.getColor(currentPos.x, currentPos.y);
     currentZ = col.getBrightness();
     //get the z value of four points around particle
-    ofColor Pleft = image.getColor(currentPos.x - gRadius, currentPos.y);
-    ofColor Pright = image.getColor(currentPos.x + gRadius, currentPos.y);
-    ofColor Pup = image.getColor(currentPos.x, currentPos.y - gRadius);
-    ofColor Pdown = image.getColor(currentPos.x, currentPos.y + gRadius);
+    ofColor Pleft = image.getColor(ofClamp(currentPos.x - gRadius, 0, image.getWidth()-1), currentPos.y);
+    ofColor Pright = image.getColor(ofClamp(currentPos.x + gRadius, 0, image.getWidth()-1), currentPos.y);
+    ofColor Pup = image.getColor(currentPos.x, ofClamp(currentPos.y - gRadius, 0, image.getHeight()-1));
+    ofColor Pdown = image.getColor(currentPos.x, ofClamp(currentPos.y + gRadius, 0, image.getHeight()-1));
     //calculate x and y components of gradient vector based on four values around particle
     //g scalar adjusts size of vector
     gradient.x = (-(currentZ - Pleft.getBrightness())/gRadius) + ((currentZ - Pright.getBrightness())/gRadius);

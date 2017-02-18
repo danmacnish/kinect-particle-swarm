@@ -33,7 +33,7 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//update particle currentPosition, based on depth data & global best currentPosition
+//update particle position, using depth data & distance from anchor position as inputs
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::update(const ofImage &image) {
@@ -97,7 +97,7 @@ void particle::reset(void) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//get reference to current particle position
+//calculate gradient vector @ particle position
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::calculateGradientVector(const ofImage &image) {

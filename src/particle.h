@@ -18,9 +18,9 @@ class particle {
     ofVec2f vel; //particle velocity
     ofVec2f gradient; //the disturbance vector (gradient around particle)
     int gRadius; //used when calculating gradient around particle. larger value means gradient will be calculated over a larger distance
-    float v_scalar1;
-    float v_scalar2;
-    float p_scalar;
+    float v_scalar1; //scales gradient vector
+    float v_scalar2; //scales distance from current position to anchor position
+    float v_scalar3; //scales perlin noise
     float uniqueVal; //allows us to make each particle slightly different
     int size;
     //position and velocity limits
@@ -35,6 +35,7 @@ public:
     void setGradientRadius(int val);
     void setScalar1(float val);
     void setScalar2(float val);
+    void setScalar3(float val);
     void setVelocityLimit(float val);
     void setParticleSize(int val);
     

@@ -22,9 +22,9 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     velLim = 10;
     size = 5;
     gRadius = 10;
-    v_scalar1 = 0.5; //scales distance from particle to local best currentPosition
-    v_scalar2 = 1; //scales distance from particle to global best currentPosition
-    p_scalar = 1;
+    v_scalar1 = 0.5; //scales gradient vector
+    v_scalar2 = 1; //scales distance from current position to anchor position
+    v_scalar3 = 1; //scales random noise
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,16 +32,16 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::update(const ofImage &image) {
-    //update velocity
-    //float r1 = ofNoise(uniqueVal, currentPos.y * 1, ofGetElapsedTimef() * 0.6);
-    //float r2 = ofNoise(uniqueVal, currentPos.x * 1, ofGetElapsedTimef() * 0.6);
+    //calculate random perlin noise to inject into particle velocity
+    float rx = ofNoise(uniqueVal, currentPos.y * 1, ofGetElapsedTimef() * 0.6);
+    float ry = ofNoise(uniqueVal, currentPos.x * 1, ofGetElapsedTimef() * 0.6);
     
     //calculate gradient vector around particle
     calculateGradientVector(image);
     
-    //calculate velocity of particle based on gradient and distance from anchor position
-    vel.x = v_scalar1*gradient.x + v_scalar2*(anchorPos.x - currentPos.x);
-    vel.y = v_scalar1*gradient.y + v_scalar2*(anchorPos.y - currentPos.y);
+    //calculate velocity of particle based on gradient @ current position, distance from anchor position, and random perlin noise
+    vel.x = v_scalar1*gradient.x + v_scalar2*(anchorPos.x - currentPos.x) + rx*v_scalar3;
+    vel.y = v_scalar1*gradient.y + v_scalar2*(anchorPos.y - currentPos.y) + ry*v_scalar3;
     //limit velocity
     vel.limit(velLim);
     //update currentPosition
@@ -135,6 +135,14 @@ void particle::setScalar1(float val) {
 
 void particle::setScalar2(float val) {
     v_scalar2 = val;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//set scalar 3
+///////////////////////////////////////////////////////////////////////////////
+
+void particle::setScalar3(float val) {
+    v_scalar3 = val;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

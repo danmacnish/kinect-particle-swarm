@@ -11,15 +11,17 @@ void ofApp::setup(){
     //set listener methods for gui sliders
     scalar1.addListener(this, &ofApp::scalar1Changed);
     scalar2.addListener(this, &ofApp::scalar2Changed);
+    scalar3.addListener(this, &ofApp::scalar3Changed);
     velocityLimit.addListener(this, &ofApp::velocityLimitChanged);
     particleSize.addListener(this, &ofApp::particleSizeChanged);
     gradientRadius.addListener(this, &ofApp::gradientRadiusChanged);
     
     //init gui
-    gui.setup("particle settings", "particle settings", 700, 200);
+    gui.setup("particle settings", "particle settings", 600, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
-    gui.add(scalar1.setup("scalar 1 (local position weighting)", 0.5, 0, 5));
-    gui.add(scalar2.setup("scalar 2 (global position weighting)", 1.0, 0, 5));
+    gui.add(scalar1.setup("gradient force", 0.5, 0, 5));
+    gui.add(scalar2.setup("anchor force", 1.0, 0, 5));
+    gui.add(scalar3.setup("random noise", 1.0, 0, 5));
     gui.add(velocityLimit.setup("velocity limit", 10, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
     gui.add(gradientRadius.setup("gradient radius", 10, 1, 30));
@@ -74,7 +76,7 @@ void ofApp::draw(){
     stringstream ss;
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
     ss << "press r to reset particles" << endl;
-    ofDrawBitmapString(ss.str().c_str(), 700, 50);
+    ofDrawBitmapString(ss.str().c_str(), 600, 50);
     
     gui.draw();
 }
@@ -102,6 +104,14 @@ void ofApp::scalar2Changed(float &val) {
     //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
     for(auto it = particles.begin(); it != particles.end(); ++it) {
         it->setScalar2(val);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::scalar3Changed(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setScalar3(val);
     }
 }
 

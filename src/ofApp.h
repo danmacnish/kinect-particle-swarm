@@ -47,5 +47,8 @@ public:
     ofxFloatSlider velocityLimit;
     ofxFloatSlider particleSize;
     ofxPanel gui;
+    
+    //gif playback control
+    bool paused;
 		
 };

@@ -17,10 +17,10 @@ void ofApp::setup(){
     gradientRadius.addListener(this, &ofApp::gradientRadiusChanged);
     
     //init gui
-    gui.setup("particle settings", "particle settings", 600, 200);
+    gui.setup("particle settings", "particle settings", 650, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
-    gui.add(scalar1.setup("gradient force", 2, 0, 10));
-    gui.add(scalar2.setup("anchor force", 3, 0, 10));
+    gui.add(scalar1.setup("gradient force", 3, 0, 10));
+    gui.add(scalar2.setup("anchor force", 2, 0, 10));
     gui.add(scalar3.setup("random noise", 1, 0, 5));
     gui.add(velocityLimit.setup("velocity limit", 10, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
@@ -28,6 +28,9 @@ void ofApp::setup(){
     
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
+    
+    //set video to paused
+    paused = true;
     
     for(int i=0; i < 530; i++){
         string filePath = path + to_string(i) + ".png";
@@ -50,7 +53,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     //index frames
-    if (ofGetElapsedTimeMillis() % 3)
+    if (ofGetElapsedTimeMillis() % 3 && !paused)
     {
         index++;
         if (index > images.size()-1) index = 0;
@@ -76,7 +79,8 @@ void ofApp::draw(){
     stringstream ss;
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
     ss << "press r to reset particles" << endl;
-    ofDrawBitmapString(ss.str().c_str(), 600, 50);
+    ss << "press p to pause/unpause playback" << endl;
+    ofDrawBitmapString(ss.str().c_str(), 650, 50);
     
     gui.draw();
 }
@@ -88,6 +92,10 @@ void ofApp::keyPressed(int key){
         for(auto it = particles.begin(); it != particles.end(); ++it) {
             it->reset();
         }
+    }
+    else if(key == 'p') {
+        //pause/unpause playback
+        this->paused = !paused;
     }
 }
 

@@ -27,8 +27,8 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     velLim = 10;
     size = 5;
     gRadius = 16;
-    v_scalar1 = 2; //scales gradient vector
-    v_scalar2 = 3; //scales distance from current position to anchor position
+    v_scalar1 = 3; //scales gradient vector
+    v_scalar2 = 2; //scales distance from current position to anchor position
     v_scalar3 = 1; //scales random noise
 }
 

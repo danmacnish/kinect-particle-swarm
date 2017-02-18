@@ -17,13 +17,18 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     uniqueVal = ofRandom(-10000,10000);
     anchorPos.x = ofRandom(0, xLim);
     anchorPos.y = ofRandom(0, yLim);
-    currentPos = anchorPos; //initialise particle at anchor currentPosition
+    //initialise particle at anchor position
+    currentPos = anchorPos;
+    //initialise noise vector
+    noise.x = ofNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
+    //set velocity to 0
     vel.set(0,0);
     velLim = 10;
     size = 5;
-    gRadius = 10;
-    v_scalar1 = 0.5; //scales gradient vector
-    v_scalar2 = 1; //scales distance from current position to anchor position
+    gRadius = 16;
+    v_scalar1 = 2; //scales gradient vector
+    v_scalar2 = 3; //scales distance from current position to anchor position
     v_scalar3 = 1; //scales random noise
 }
 
@@ -33,15 +38,20 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
 
 void particle::update(const ofImage &image) {
     //calculate random perlin noise to inject into particle velocity
-    float rx = ofNoise(uniqueVal, currentPos.y * 1, ofGetElapsedTimef() * 0.6);
-    float ry = ofNoise(uniqueVal, currentPos.x * 1, ofGetElapsedTimef() * 0.6);
+    noise.x = ofNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
     
-    //calculate gradient vector around particle
+    //calculate gradient vector around particle then normalise
     calculateGradientVector(image);
+    gradient.normalize();
+    
+    //calculate distance from current position->anchor position then normalise
+    anchorDistance = anchorPos - currentPos;
+    anchorDistance.normalize();
     
     //calculate velocity of particle based on gradient @ current position, distance from anchor position, and random perlin noise
-    vel.x = v_scalar1*gradient.x + v_scalar2*(anchorPos.x - currentPos.x) + rx*v_scalar3;
-    vel.y = v_scalar1*gradient.y + v_scalar2*(anchorPos.y - currentPos.y) + ry*v_scalar3;
+    vel = v_scalar1*gradient + v_scalar2*anchorDistance + v_scalar3*noise;
+    
     //limit velocity
     vel.limit(velLim);
     //update currentPosition

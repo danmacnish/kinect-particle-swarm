@@ -19,12 +19,12 @@ void ofApp::setup(){
     //init gui
     gui.setup("particle settings", "particle settings", 600, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
-    gui.add(scalar1.setup("gradient force", 0.5, 0, 5));
-    gui.add(scalar2.setup("anchor force", 1.0, 0, 5));
-    gui.add(scalar3.setup("random noise", 1.0, 0, 5));
+    gui.add(scalar1.setup("gradient force", 2, 0, 10));
+    gui.add(scalar2.setup("anchor force", 3, 0, 10));
+    gui.add(scalar3.setup("random noise", 1, 0, 5));
     gui.add(velocityLimit.setup("velocity limit", 10, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
-    gui.add(gradientRadius.setup("gradient radius", 10, 1, 30));
+    gui.add(gradientRadius.setup("gradient radius", 16, 1, 30));
     
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";

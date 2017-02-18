@@ -15,8 +15,10 @@ class particle {
     ofVec2f currentPos; //the current position
     float currentZ; //current depth value
     ofVec2f anchorPos; //the position the particle tries to maintain
+    ofVec2f anchorDistance; //distance from current position to anchor position
     ofVec2f vel; //particle velocity
     ofVec2f gradient; //the disturbance vector (gradient around particle)
+    ofVec2f noise; //noise vector
     int gRadius; //used when calculating gradient around particle. larger value means gradient will be calculated over a larger distance
     float v_scalar1; //scales gradient vector
     float v_scalar2; //scales distance from current position to anchor position

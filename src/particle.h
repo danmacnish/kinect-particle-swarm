@@ -44,9 +44,11 @@ public:
     //get methods
     const ofVec2f &getCurrentPosition(void);
     
-    
+    //update particle position based on depth data
     void update(const ofImage &image);
+    //draw particle
     void draw(void);
+    ///reset particle to new position and 0 velocity
     void reset(void);
     ~particle();
 

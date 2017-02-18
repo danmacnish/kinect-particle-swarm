@@ -20,8 +20,8 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     //initialise particle at anchor position
     currentPos = anchorPos;
     //initialise noise vector
-    noise.x = ofNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
-    noise.y = ofNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.x = ofSignedNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofSignedNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
     //set velocity to 0
     vel.set(0,0);
     velLim = 10;
@@ -38,8 +38,8 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
 
 void particle::update(const ofImage &image) {
     //calculate random perlin noise to inject into particle velocity
-    noise.x = ofNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
-    noise.y = ofNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.x = ofSignedNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofSignedNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
     
     //calculate gradient vector around particle then normalise
     calculateGradientVector(image);

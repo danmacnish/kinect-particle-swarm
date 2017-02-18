@@ -23,6 +23,7 @@ class particle {
     float v_scalar1; //scales gradient vector
     float v_scalar2; //scales distance from current position to anchor position
     float v_scalar3; //scales perlin noise
+    float v_scalar4; //amount that new velocity is influenced by current velocity
     float uniqueVal; //allows us to make each particle slightly different
     int size;
     //position and velocity limits
@@ -38,6 +39,7 @@ public:
     void setScalar1(float val);
     void setScalar2(float val);
     void setScalar3(float val);
+    void setScalar4(float val);
     void setVelocityLimit(float val);
     void setParticleSize(int val);
     

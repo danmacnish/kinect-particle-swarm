@@ -12,6 +12,7 @@ void ofApp::setup(){
     scalar1.addListener(this, &ofApp::scalar1Changed);
     scalar2.addListener(this, &ofApp::scalar2Changed);
     scalar3.addListener(this, &ofApp::scalar3Changed);
+    scalar4.addListener(this, &ofApp::scalar4Changed);
     velocityLimit.addListener(this, &ofApp::velocityLimitChanged);
     particleSize.addListener(this, &ofApp::particleSizeChanged);
     gradientRadius.addListener(this, &ofApp::gradientRadiusChanged);
@@ -22,6 +23,7 @@ void ofApp::setup(){
     gui.add(scalar1.setup("gradient force", 0.58, 0, 2));
     gui.add(scalar2.setup("anchor force", 0.34, 0, 2));
     gui.add(scalar3.setup("random noise", 0.25, 0, 1));
+    gui.add(scalar4.setup("current velocity", 1, 0, 1));
     gui.add(velocityLimit.setup("velocity limit", 5.41, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
     gui.add(gradientRadius.setup("gradient radius", 23, 1, 30));
@@ -120,6 +122,14 @@ void ofApp::scalar3Changed(float &val) {
     //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
     for(auto it = particles.begin(); it != particles.end(); ++it) {
         it->setScalar3(val);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::scalar4Changed(float &val) {
+    //set scalar 1 for each particle. scalar 1 is the weight given to the particles local best position
+    for(auto it = particles.begin(); it != particles.end(); ++it) {
+        it->setScalar4(val);
     }
 }
 

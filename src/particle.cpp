@@ -30,6 +30,7 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     v_scalar1 = 0.58; //scales gradient vector
     v_scalar2 = 0.34; //scales distance from current position to anchor position
     v_scalar3 = 0.25; //scales random noise
+    v_scalar4 = 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +50,7 @@ void particle::update(const ofImage &image) {
     anchorDistance.normalize();
     
     //calculate velocity of particle based on gradient @ current position, distance from anchor position, and random perlin noise
-    vel = v_scalar1*gradient + v_scalar2*anchorDistance + v_scalar3*noise;
+    vel =  v_scalar4*vel + v_scalar1*gradient + v_scalar2*anchorDistance + v_scalar3*noise;
     
     //limit velocity
     vel.limit(velLim);
@@ -152,6 +153,14 @@ void particle::setScalar2(float val) {
 
 void particle::setScalar3(float val) {
     v_scalar3 = val;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//set scalar 4
+///////////////////////////////////////////////////////////////////////////////
+
+void particle::setScalar4(float val) {
+    v_scalar4 = val;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

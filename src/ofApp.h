@@ -28,6 +28,7 @@ public:
     void scalar1Changed(float &val);
     void scalar2Changed(float &val);
     void scalar3Changed(float &val);
+    void scalar4Changed(float &val);
     void velocityLimitChanged(float &val);
     void particleSizeChanged(float &val);
     void gradientRadiusChanged(float &val);
@@ -43,6 +44,7 @@ public:
     ofxFloatSlider scalar1;
     ofxFloatSlider scalar2;
     ofxFloatSlider scalar3;
+    ofxFloatSlider scalar4;
     ofxFloatSlider gradientRadius;
     ofxFloatSlider velocityLimit;
     ofxFloatSlider particleSize;

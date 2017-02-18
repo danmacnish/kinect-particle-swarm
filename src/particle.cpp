@@ -24,12 +24,12 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
     noise.y = ofSignedNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
     //set velocity to 0
     vel.set(0,0);
-    velLim = 10;
+    velLim = 5.5;
     size = 5;
-    gRadius = 16;
-    v_scalar1 = 3; //scales gradient vector
-    v_scalar2 = 2; //scales distance from current position to anchor position
-    v_scalar3 = 1; //scales random noise
+    gRadius = 23;
+    v_scalar1 = 0.58; //scales gradient vector
+    v_scalar2 = 0.34; //scales distance from current position to anchor position
+    v_scalar3 = 0.25; //scales random noise
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,9 +41,8 @@ void particle::update(const ofImage &image) {
     noise.x = ofSignedNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
     noise.y = ofSignedNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
     
-    //calculate gradient vector around particle then normalise
+    //calculate gradient vector around particle
     calculateGradientVector(image);
-    gradient.normalize();
     
     //calculate distance from current position->anchor position then normalise
     anchorDistance = anchorPos - currentPos;

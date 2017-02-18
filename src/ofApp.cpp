@@ -19,12 +19,12 @@ void ofApp::setup(){
     //init gui
     gui.setup("particle settings", "particle settings", 650, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
-    gui.add(scalar1.setup("gradient force", 3, 0, 10));
-    gui.add(scalar2.setup("anchor force", 2, 0, 10));
-    gui.add(scalar3.setup("random noise", 1, 0, 5));
-    gui.add(velocityLimit.setup("velocity limit", 10, 1, 50));
+    gui.add(scalar1.setup("gradient force", 0.58, 0, 2));
+    gui.add(scalar2.setup("anchor force", 0.34, 0, 2));
+    gui.add(scalar3.setup("random noise", 0.25, 0, 1));
+    gui.add(velocityLimit.setup("velocity limit", 5.41, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
-    gui.add(gradientRadius.setup("gradient radius", 16, 1, 30));
+    gui.add(gradientRadius.setup("gradient radius", 23, 1, 30));
     
     //load the kinect frames in png format
     string path = "kinect data/raw frames/frame";
@@ -42,7 +42,7 @@ void ofApp::setup(){
     
     //init particles
     for(int i = 0; i < num_particles; ++i) {
-        particle p(639,479);
+        particle p(620,479);
         particles.push_back(p);
     }
     ofLogNotice() << "initialised particles";

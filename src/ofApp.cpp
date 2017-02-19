@@ -20,10 +20,10 @@ void ofApp::setup(){
     //init gui
     gui.setup("particle settings", "particle settings", 650, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
-    gui.add(scalar1.setup("gradient force", 0.58, 0, 2));
-    gui.add(scalar2.setup("anchor force", 0.34, 0, 2));
-    gui.add(scalar3.setup("random noise", 0.25, 0, 1));
-    gui.add(scalar4.setup("current velocity", 1, 0, 1));
+    gui.add(scalar1.setup("gradient force", 0.001, 0, 0.1));
+    gui.add(scalar2.setup("anchor force", 0.34, 0, 1));
+    gui.add(scalar3.setup("random noise", 0, 0, 1));
+    gui.add(scalar4.setup("current velocity", 0.25, 0, 1));
     gui.add(velocityLimit.setup("velocity limit", 5.41, 1, 50));
     gui.add(particleSize.setup("particle size", 5, 1, 20));
     gui.add(gradientRadius.setup("gradient radius", 23, 1, 30));

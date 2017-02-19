@@ -30,6 +30,7 @@ class particle {
     int xLim;
     int yLim;
     float velLim;
+    float distLimSquared; //maximum distance^2 from particle to anchor position
     
 public:
     //constructor, pass in x and y position limits

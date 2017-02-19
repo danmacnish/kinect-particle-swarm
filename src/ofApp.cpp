@@ -44,7 +44,7 @@ void ofApp::setup(){
     
     //init particles
     for(int i = 0; i < num_particles; ++i) {
-        particle p(620,479);
+        particle p(630,479);
         particles.push_back(p);
     }
     ofLogNotice() << "initialised particles";

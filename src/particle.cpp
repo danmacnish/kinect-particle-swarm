@@ -52,6 +52,8 @@ void particle::update(const ofImage &image) {
     anchorDistance.normalize();
     
     //calculate velocity of particle based on gradient @ current position, distance from anchor position, and random perlin noise
+    //force from anchor decreases as particle moves further away
+    //gradient is exponential, i.e. when depth field is nearly flat it has an exponentially smaller effect on the particles
     vel =  v_scalar4*vel + gradient/v_scalar1 + (anchorDistance*(distLimSquared - anchorPos.squareDistance(currentPos)))/v_scalar2 + v_scalar3*noise;
     
     //limit velocity
@@ -91,28 +93,31 @@ void particle::draw(void) {
 
 void particle::reset(void) {
     //re spawn particles in new currentPositions with new velocities
-    currentPos.x = ofRandom(0, xLim);
-    currentPos.y = ofRandom(0, yLim);
-    anchorPos = currentPos;
+    //currentPos.x = ofRandom(0, xLim);
+    //currentPos.y = ofRandom(0, yLim);
+    //anchorPos = currentPos;
+    currentPos = anchorPos;
     vel.x = 0;
     vel.y = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //calculate gradient vector @ particle position
-//////////////////////////////////////////////y////////////////////////////////
+//gradient vector increases exponentially as disturbances in the depth field increase
+//i.e. when depth field is nearly flat, gradient has relatively little effect on particles,
+//but when depth field is crazy undulating, gradient has large effect on particles
+///////////////////////////////////////////////////////////////////////////////
 
 void particle::calculateGradientVector(const ofImage &image) {
     //get the current z value
     ofColor col = image.getColor(currentPos.x, currentPos.y);
     currentZ = pow(col.getBrightness(),2);
     //get the z value of four points around particle
-    ofColor Pleft = image.getColor(ofClamp(currentPos.x - gRadius, 0, image.getWidth()-1), currentPos.y);
-    ofColor Pright = image.getColor(ofClamp(currentPos.x + gRadius, 0, image.getWidth()-1), currentPos.y);
+    ofColor Pleft = image.getColor(ofClamp(currentPos.x - gRadius, 0, image.getWidth()-10), currentPos.y);
+    ofColor Pright = image.getColor(ofClamp(currentPos.x + gRadius, 0, image.getWidth()-10), currentPos.y);
     ofColor Pup = image.getColor(currentPos.x, ofClamp(currentPos.y - gRadius, 0, image.getHeight()-1));
     ofColor Pdown = image.getColor(currentPos.x, ofClamp(currentPos.y + gRadius, 0, image.getHeight()-1));
     //calculate x and y components of gradient vector based on four values around particle
-    //g scalar adjusts size of vector
     gradient.x = (-(currentZ - pow(Pleft.getBrightness(),2))/gRadius) + ((currentZ - pow(Pright.getBrightness(),2))/gRadius);
     gradient.y = (-(currentZ - pow(Pup.getBrightness(),2))/gRadius) + ((currentZ - pow(Pdown.getBrightness(),2))/gRadius);
 }

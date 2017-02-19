@@ -21,7 +21,7 @@ void ofApp::setup(){
     gui.setup("particle settings", "particle settings", 650, 200);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
     gui.add(scalar1.setup("gradient force", 650, 0, 2000));
-    gui.add(scalar2.setup("anchor force", 2000000, 0, 3000000));
+    gui.add(scalar2.setup("anchor force", 2000000, 0, 4000000));
     gui.add(scalar3.setup("random noise", 0.06, 0, 0.5));
     gui.add(scalar4.setup("current velocity", 0.86, 0, 1));
     gui.add(velocityLimit.setup("velocity limit", 2.25, 1, 5));

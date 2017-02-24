@@ -41,6 +41,8 @@ public:
     vector<particle> particles;
     vector<ofVec2f> particlePositions;
     vector<ofVec3f> particleSizes;
+    int xlimit = 630; //x and y limits of particle position on kinect depth image. 
+    int ylimit = 479;
     
     //openGL
     ofVbo vbo; //Vertex buffered object, stores our point vertices on the graphics card. Basically means that we don't have to send the GPU an entire new array of points each time

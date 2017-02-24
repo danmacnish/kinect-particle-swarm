@@ -53,8 +53,6 @@ void ofApp::setup(){
     }
     ofLogNotice() << "loaded images";
     
-    int xlimit = 630;
-    int ylimit = 479;
     //init particle positions, do this first because .push_back() seems to change address of array element & mess up particle.currentPosition
     for(auto i = 0; i < numParticles; ++i) {
         ofVec2f pos;

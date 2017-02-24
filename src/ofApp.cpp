@@ -5,6 +5,17 @@ void ofApp::setup(){
     //set OF log level
     ofSetLogLevel(OF_LOG_WARNING);
     
+    //set our background to black
+    ofBackgroundHex(0x000000);
+    
+    //disable ARB textures (non-arb textures are better supported), and load the texure
+    ofDisableArbTex();
+    ofLoadImage(texture, "dot.png");
+    
+    // set the camera distance
+    camDist  = 1605;
+    camera.setDistance(camDist);
+    
     //seed random number generator
     ofSeedRandom();
     
@@ -68,7 +79,6 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0);
     ofSetColor(255,255,255);
     images[index].draw(0, 0);
     

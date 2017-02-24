@@ -10,18 +10,51 @@
 #include "particle.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-//constructor, initialises particle at random Position from 0,0 to x,y
+//constructor, initialises particle at pos x,y with limits xlim y lim
 ///////////////////////////////////////////////////////////////////////////////
 
-particle::particle(int x, int y) : xLim(x), yLim(y) {
+particle::particle(float x, float y, int xLimit, int yLimit) : xLim(xLimit), yLim(yLimit) {
+    //init anchor position
+    anchorPos.set(x,y);
+    //init uniqueVal, used to make each particle motion a little bit different
     uniqueVal = ofRandom(-10000,10000);
-    anchorPos.x = ofRandom(0, xLim);
-    anchorPos.y = ofRandom(0, yLim);
     //initialise particle at anchor position
-    currentPos = anchorPos;
+    currentPos->x = anchorPos.x;
+    currentPos->y = anchorPos.y;
     //initialise noise vector
-    noise.x = ofSignedNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
-    noise.y = ofSignedNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.x = ofSignedNoise(uniqueVal, currentPos->y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofSignedNoise(uniqueVal, currentPos->x * 0.05, ofGetElapsedTimef() * 0.6);
+    //set velocity to 0
+    vel.set(0,0);
+    velLim = 2.25;
+    size = 3;
+    gRadius = 23;
+    //calculate max distance from particle to anchor position. used to decay anchor force
+    distLimSquared = pow(xLim, 2) + pow(yLim,2);
+    v_scalar1 = 650; //scales gradient vector
+    v_scalar2 = 2000000; //scales distance from current position to anchor position
+    v_scalar3 = 0.06; //scales random noise
+    v_scalar4 = 0.86; //effect of previous velocity on current velocity
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//constructor, initialises particle at pos x,y with limits xlim y lim, and address of current position
+//Used if you want access to particle positions in a contiguous block of memory.
+///////////////////////////////////////////////////////////////////////////////
+
+particle::particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos) : xLim(xLimit), yLim(yLimit) {
+    //set current position vector address
+    currentPos = &Pos;
+    //init anchor position
+    anchorPos.set(x,y);
+    //init uniqueVal, used to make each particle motion a little bit different
+    uniqueVal = ofRandom(-10000,10000);
+    //initialise particle at anchor position
+    currentPos->x = anchorPos.x;
+    currentPos->y = anchorPos.y;
+    //initialise noise vector
+    noise.x = ofSignedNoise(uniqueVal, currentPos->y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofSignedNoise(uniqueVal, currentPos->x * 0.05, ofGetElapsedTimef() * 0.6);
     //set velocity to 0
     vel.set(0,0);
     velLim = 2.25;
@@ -41,39 +74,39 @@ particle::particle(int x, int y) : xLim(x), yLim(y) {
 
 void particle::update(const ofImage &image) {
     //calculate random perlin noise to inject into particle velocity
-    noise.x = ofSignedNoise(uniqueVal, currentPos.y * 0.05, ofGetElapsedTimef() * 0.6);
-    noise.y = ofSignedNoise(uniqueVal, currentPos.x * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.x = ofSignedNoise(uniqueVal, currentPos->y * 0.05, ofGetElapsedTimef() * 0.6);
+    noise.y = ofSignedNoise(uniqueVal, currentPos->x * 0.05, ofGetElapsedTimef() * 0.6);
     
     //calculate gradient vector around particle
     calculateGradientVector(image);
     
     //calculate vector from current position->anchor position then normalise
-    anchorDistance = anchorPos - currentPos;
+    anchorDistance = anchorPos - *currentPos;
     anchorDistance.normalize();
     
     //calculate velocity of particle based on gradient @ current position, distance from anchor position, and random perlin noise
     //force from anchor decreases as particle moves further away
     //gradient is exponential, i.e. when depth field is nearly flat it has an exponentially smaller effect on the particles
-    vel =  v_scalar4*vel + gradient/v_scalar1 + (anchorDistance*(distLimSquared - anchorPos.squareDistance(currentPos)))/v_scalar2 + v_scalar3*noise;
+    vel =  v_scalar4*vel + gradient/v_scalar1 + (anchorDistance*(distLimSquared - anchorPos.squareDistance(*currentPos)))/v_scalar2 + v_scalar3*noise;
     
     //limit velocity
     vel.limit(velLim);
     //update currentPosition
-    currentPos += vel;
+    *currentPos += vel;
     //limit the particle to stay within bounds
-    if( currentPos.x > xLim ){
-        currentPos.x = xLim;
+    if( currentPos->x > xLim ){
+        currentPos->x = xLim;
         vel.x *= -1.0;
-    }else if( currentPos.x < 0 ){
-        currentPos.x = 0;
+    }else if( currentPos->x < 0 ){
+        currentPos->x = 0;
         vel.x *= -1.0;
     }
-    if( currentPos.y > yLim ){
-        currentPos.y = yLim;
+    if( currentPos->y > yLim ){
+        currentPos->y = yLim;
         vel.y *= -1.0;
     }
-    else if( currentPos.y < 0 ){
-        currentPos.y = 0;
+    else if( currentPos->y < 0 ){
+        currentPos->y = 0;
         vel.y *= -1.0;
     }
 }
@@ -84,7 +117,7 @@ void particle::update(const ofImage &image) {
 
 void particle::draw(void) {
     ofSetColor(208, 255, 63);
-    ofDrawCircle(currentPos, size);
+    ofDrawCircle(*currentPos, size);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +126,10 @@ void particle::draw(void) {
 
 void particle::reset(void) {
     //re spawn particles in new currentPositions with new velocities
-    //currentPos.x = ofRandom(0, xLim);
-    //currentPos.y = ofRandom(0, yLim);
+    //currentPos->x = ofRandom(0, xLim);
+    //currentPos->y = ofRandom(0, yLim);
     //anchorPos = currentPos;
-    currentPos = anchorPos;
+    *currentPos = anchorPos;
     vel.x = 0;
     vel.y = 0;
 }
@@ -110,13 +143,13 @@ void particle::reset(void) {
 
 void particle::calculateGradientVector(const ofImage &image) {
     //get the current z value
-    ofColor col = image.getColor(currentPos.x, currentPos.y);
+    ofColor col = image.getColor(currentPos->x, currentPos->y);
     currentZ = pow(col.getBrightness(),2);
     //get the z value of four points around particle
-    ofColor Pleft = image.getColor(ofClamp(currentPos.x - gRadius, 0, image.getWidth()-10), currentPos.y);
-    ofColor Pright = image.getColor(ofClamp(currentPos.x + gRadius, 0, image.getWidth()-10), currentPos.y);
-    ofColor Pup = image.getColor(currentPos.x, ofClamp(currentPos.y - gRadius, 0, image.getHeight()-1));
-    ofColor Pdown = image.getColor(currentPos.x, ofClamp(currentPos.y + gRadius, 0, image.getHeight()-1));
+    ofColor Pleft = image.getColor(ofClamp(currentPos->x - gRadius, 0, image.getWidth()-10), currentPos->y);
+    ofColor Pright = image.getColor(ofClamp(currentPos->x + gRadius, 0, image.getWidth()-10), currentPos->y);
+    ofColor Pup = image.getColor(currentPos->x, ofClamp(currentPos->y - gRadius, 0, image.getHeight()-1));
+    ofColor Pdown = image.getColor(currentPos->x, ofClamp(currentPos->y + gRadius, 0, image.getHeight()-1));
     //calculate x and y components of gradient vector based on four values around particle
     gradient.x = (-(currentZ - pow(Pleft.getBrightness(),2))/gRadius) + ((currentZ - pow(Pright.getBrightness(),2))/gRadius);
     gradient.y = (-(currentZ - pow(Pup.getBrightness(),2))/gRadius) + ((currentZ - pow(Pdown.getBrightness(),2))/gRadius);
@@ -126,7 +159,7 @@ void particle::calculateGradientVector(const ofImage &image) {
 //get reference to current particle position
 ///////////////////////////////////////////////////////////////////////////////
 
-const ofVec2f &particle::getCurrentPosition(void) {
+const ofVec2f *particle::getCurrentPosition(void) {
     return currentPos;
 }
 

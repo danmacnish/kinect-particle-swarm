@@ -53,9 +53,16 @@ void ofApp::setup(){
     }
     ofLogNotice() << "loaded images";
     
+    int xlimit = 630;
+    int ylimit = 479;
+    //init particle positions
+    for(auto i = 0; i < numParticles; ++i) {
+        ofVec2f pos;
+        particlePositions.push_back(pos);
+    };
     //init particles
-    for(int i = 0; i < num_particles; ++i) {
-        particle p(630,479);
+    for(auto i = 0; i < numParticles; ++i) {
+        particle p(ofRandom(0, xlimit), ofRandom(0, ylimit), xlimit, ylimit, particlePositions[i]);
         particles.push_back(p);
     }
     ofLogNotice() << "initialised particles";

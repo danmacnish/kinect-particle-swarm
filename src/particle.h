@@ -12,7 +12,7 @@
 #include "ofMain.h"
 
 class particle {
-    ofVec2f currentPos; //the current position
+    ofVec2f* currentPos; //the current position
     float currentZ; //current depth value
     ofVec2f anchorPos; //the position the particle tries to maintain
     ofVec2f anchorDistance; //distance from current position to anchor position
@@ -33,8 +33,11 @@ class particle {
     float distLimSquared; //maximum distance^2 from particle to anchor position
     
 public:
-    //constructor, pass in x and y position limits
-    particle(int x, int y);
+    //constructor, pass in x and y initial position and position limits
+    particle(float x, float y, int xLimit, int yLimit);
+    //constructor, pass in x and y initial position and limits, and address to current position vector.
+    //Used if you want access to particle positions in a contiguous block of memory.
+    particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos);
     //set methods
     void setGradientRadius(int val);
     void setScalar1(float val);
@@ -45,7 +48,7 @@ public:
     void setParticleSize(int val);
     
     //get methods
-    const ofVec2f &getCurrentPosition(void);
+    const ofVec2f *getCurrentPosition(void);
     
     //update particle position based on depth data
     void update(const ofImage &image);

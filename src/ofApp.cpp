@@ -55,10 +55,12 @@ void ofApp::setup(){
     
     int xlimit = 630;
     int ylimit = 479;
-    //init particle positions
+    //init particle positions, do this first because .push_back() seems to change address of array element & mess up particle.currentPosition
     for(auto i = 0; i < numParticles; ++i) {
         ofVec2f pos;
         particlePositions.push_back(pos);
+        ofVec3f size(5);
+        particleSizes.push_back(size);
     };
     //init particles
     for(auto i = 0; i < numParticles; ++i) {
@@ -67,7 +69,16 @@ void ofApp::setup(){
     }
     ofLogNotice() << "initialised particles";
     
+    // upload the data to the vbo
+    vbo.setVertexData(&particlePositions[0], numParticles, GL_DYNAMIC_DRAW);
+    vbo.setNormalData(&particleSizes[0], numParticles, GL_DYNAMIC_DRAW);
     
+    // load the shader
+    #ifdef TARGET_OPENGLES
+        shader.load("shaders_gles/shader");
+    #else
+        shader.load("shaders/shader");
+    #endif
 }
 
 //--------------------------------------------------------------
@@ -82,18 +93,47 @@ void ofApp::update(){
     for(auto it = particles.begin(); it != particles.end(); ++it) {
         it->update(images[index]);
     }
+    //update vbo vertices
+    vbo.updateVertexData(&particlePositions[0], numParticles);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetColor(255,255,255);
+    ofSetColor(255, 255, 255);
     images[index].draw(0, 0);
+    glDepthMask(GL_FALSE);
+    ofSetColor(255, 100, 90);
+    //images[index].draw(0, 0);
+    
+    // this makes everything look glowy :)
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
+    ofEnablePointSprites();
+    
+    // bind the shader and camera
+    // everything inside this function
+    // will be effected by the shader/camera
+    shader.begin();
+    camera.begin();
+    
+    // bind the texture so that when all the points
+    // are drawn they are replace with our dot image
+    texture.bind();
+    vbo.draw(GL_POINTS, 0, numParticles);
+    texture.unbind();
+    
+    camera.end();
+    shader.end();
+    
+    ofDisablePointSprites();
+    ofDisableBlendMode();
+
     
     //draw the particles
-    for(auto it = particles.begin(); it != particles.end(); ++it) {
-        it->draw();
-    }
+    //for(auto it = particles.begin(); it != particles.end(); ++it) {
+     //   it->draw();
+    //}
     
+    glDepthMask(GL_TRUE);
     //write framerate and other info to screen
     stringstream ss;
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
@@ -116,6 +156,13 @@ void ofApp::keyPressed(int key){
         //pause/unpause playback
         this->paused = !paused;
     }
+    if(key == OF_KEY_UP) {
+        camDist -= 10;
+    }
+    if(key == OF_KEY_DOWN) {
+        camDist += 10;
+    }
+    camera.setDistance(camDist);
 }
 
 //--------------------------------------------------------------

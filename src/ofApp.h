@@ -40,6 +40,7 @@ public:
     const int numParticles = 200; //number of particles
     vector<particle> particles;
     vector<ofVec2f> particlePositions;
+    vector<ofVec3f> particleSizes;
     
     //openGL
     ofVbo vbo; //Vertex buffered object, stores our point vertices on the graphics card. Basically means that we don't have to send the GPU an entire new array of points each time

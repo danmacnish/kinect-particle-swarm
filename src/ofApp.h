@@ -38,7 +38,7 @@ public:
 
     //particles
     vector<particle> particles;
-    int num_particles = 80; //number of particles
+    int num_particles = 200; //number of particles
 
     //gui
     ofxFloatSlider scalar1;

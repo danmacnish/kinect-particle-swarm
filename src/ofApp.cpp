@@ -12,8 +12,11 @@ void ofApp::setup(){
     ofDisableArbTex();
     ofLoadImage(texture, "dot.png");
     
+    //disable drawing the kinect frame
+    drawKinectFrame = false;
+    
     // set the camera distance
-    camDist  = 1605;
+    camDist  = 500;
     camera.setDistance(camDist);
     
     //seed random number generator
@@ -57,7 +60,7 @@ void ofApp::setup(){
     for(auto i = 0; i < numParticles; ++i) {
         ofVec2f pos;
         particlePositions.push_back(pos);
-        ofVec3f size(5);
+        ofVec3f size(15);
         particleSizes.push_back(size);
     };
     //init particles
@@ -97,11 +100,13 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetColor(255, 255, 255);
-    images[index].draw(0, 0);
+    //draw the kinect frame if enabled
+    if(drawKinectFrame) {
+        ofSetColor(255, 255, 255);
+        images[index].draw(0, 0);
+    }
     glDepthMask(GL_FALSE);
-    ofSetColor(255, 100, 90);
-    //images[index].draw(0, 0);
+    ofSetColor(255, 255, 255); //set color to white
     
     // this makes everything look glowy :)
     ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -153,6 +158,10 @@ void ofApp::keyPressed(int key){
     else if(key == 'p') {
         //pause/unpause playback
         this->paused = !paused;
+    }
+    else if(key == 'd') {
+        //enable/disable drawing the kinect frame
+        this->drawKinectFrame = !drawKinectFrame;
     }
     if(key == OF_KEY_UP) {
         camDist -= 10;

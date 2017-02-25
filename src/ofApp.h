@@ -59,6 +59,7 @@ public:
     ofxFloatSlider gradientRadius;
     ofxFloatSlider velocityLimit;
     ofxFloatSlider particleSize;
+    bool drawKinectFrame; //sets whether to draw kinect depth data
     ofxPanel gui;
     
     //gif playback control

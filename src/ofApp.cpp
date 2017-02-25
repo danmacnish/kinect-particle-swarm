@@ -32,7 +32,7 @@ void ofApp::setup(){
     gradientRadius.addListener(this, &ofApp::gradientRadiusChanged);
     
     //init gui
-    gui.setup("particle settings", "particle settings", 650, 200);
+    gui.setup("particle settings", "particle settings", 10, 100);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
     gui.add(scalar1.setup("gradient force", 650, 0, 2000));
     gui.add(scalar2.setup("anchor force", 2000000, 0, 4000000));
@@ -60,7 +60,7 @@ void ofApp::setup(){
     for(auto i = 0; i < numParticles; ++i) {
         ofVec2f pos;
         particlePositions.push_back(pos);
-        ofVec3f size(15);
+        ofVec3f size(ofRandom(5,15));
         particleSizes.push_back(size);
     };
     //init particles
@@ -142,7 +142,8 @@ void ofApp::draw(){
     ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
     ss << "press r to reset particles" << endl;
     ss << "press p to pause/unpause playback" << endl;
-    ofDrawBitmapString(ss.str().c_str(), 650, 50);
+    ss << "press d to draw kinect depth frame" << endl;
+    ofDrawBitmapString(ss.str().c_str(), 10, 20);
     
     gui.draw();
 }

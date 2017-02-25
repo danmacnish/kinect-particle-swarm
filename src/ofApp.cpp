@@ -16,7 +16,7 @@ void ofApp::setup(){
     drawKinectFrame = false;
     
     // set the camera distance
-    camDist  = 500;
+    camDist  = 450;
     camera.setDistance(camDist);
     
     //seed random number generator

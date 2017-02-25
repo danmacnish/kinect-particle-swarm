@@ -25,7 +25,7 @@ class particle {
     float v_scalar3; //scales perlin noise
     float v_scalar4; //amount that new velocity is influenced by current velocity
     float uniqueVal; //allows us to make each particle slightly different
-    int size;
+    ofVec3f* size; //particle size (3d vector needed because size is supplied as the normal vactor to openGL buffer)
     //position and velocity limits
     int xLim;
     int yLim;
@@ -37,7 +37,7 @@ public:
     particle(float x, float y, int xLimit, int yLimit);
     //constructor, pass in x and y initial position and limits, and address to current position vector.
     //Used if you want access to particle positions in a contiguous block of memory.
-    particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos);
+    particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos, ofVec3f& Size);
     //set methods
     void setGradientRadius(int val);
     void setScalar1(float val);
@@ -52,8 +52,6 @@ public:
     
     //update particle position based on depth data
     void update(const ofImage &image);
-    //draw particle
-    void draw(void);
     ///reset particle to new position and 0 velocity
     void reset(void);
     ~particle();

@@ -56,7 +56,7 @@ void ofApp::setup(){
     }
     ofLogNotice() << "loaded images";
     
-    //init particle positions, do this first because .push_back() seems to change address of array element & mess up particle.currentPosition
+    //init particle positions, do this first because .push_back() seems to change address of array elements & mess up particle.currentPosition
     for(auto i = 0; i < numParticles; ++i) {
         ofVec2f pos;
         particlePositions.push_back(pos);
@@ -65,7 +65,7 @@ void ofApp::setup(){
     };
     //init particles
     for(auto i = 0; i < numParticles; ++i) {
-        particle p(ofRandom(0, xlimit), ofRandom(0, ylimit), xlimit, ylimit, particlePositions[i]);
+        particle p(ofRandom(0, xlimit), ofRandom(0, ylimit), xlimit, ylimit, particlePositions[i], particleSizes[i]);
         particles.push_back(p);
     }
     ofLogNotice() << "initialised particles";

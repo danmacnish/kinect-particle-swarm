@@ -27,7 +27,6 @@ particle::particle(float x, float y, int xLimit, int yLimit) : xLim(xLimit), yLi
     //set velocity to 0
     vel.set(0,0);
     velLim = 2.25;
-    size = 3;
     gRadius = 23;
     //calculate max distance from particle to anchor position. used to decay anchor force
     distLimSquared = pow(xLim, 2) + pow(yLim,2);
@@ -42,9 +41,11 @@ particle::particle(float x, float y, int xLimit, int yLimit) : xLim(xLimit), yLi
 //Used if you want access to particle positions in a contiguous block of memory.
 ///////////////////////////////////////////////////////////////////////////////
 
-particle::particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos) : xLim(xLimit), yLim(yLimit) {
+particle::particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos, ofVec3f& Size) : xLim(xLimit), yLim(yLimit) {
     //set current position vector address
     currentPos = &Pos;
+    //set  particle size. Allocated from pointer so that all particle sizes are a contiguous block of memory
+    size = &Size;
     //init anchor position
     anchorPos.set(x,y);
     //init uniqueVal, used to make each particle motion a little bit different
@@ -58,7 +59,6 @@ particle::particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos) : xLi
     //set velocity to 0
     vel.set(0,0);
     velLim = 2.25;
-    size = 3;
     gRadius = 23;
     //calculate max distance from particle to anchor position. used to decay anchor force
     distLimSquared = pow(xLim, 2) + pow(yLim,2);
@@ -109,15 +109,6 @@ void particle::update(const ofImage &image) {
         currentPos->y = 0;
         vel.y *= -1.0;
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//draw the particle
-///////////////////////////////////////////////////////////////////////////////
-
-void particle::draw(void) {
-    ofSetColor(208, 255, 63);
-    ofDrawCircle(*currentPos, size);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +207,7 @@ void particle::setVelocityLimit(float val) {
 ///////////////////////////////////////////////////////////////////////////////
 
 void particle::setParticleSize(int val) {
-    size = val;
+    size->set(val,val,val);
 }
 
 particle::~particle() {

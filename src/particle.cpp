@@ -87,7 +87,7 @@ void particle::update(const ofImage &image) {
     //calculate velocity of particle based on gradient @ current position, distance from anchor position, and random perlin noise
     //force from anchor decreases as particle moves further away
     //gradient is exponential, i.e. when depth field is nearly flat it has an exponentially smaller effect on the particles
-    vel =  v_scalar4*ofClamp(log(anchorPos.squareDistance(*currentPos)) - 3, 0, 0.9)*vel //influence of current velocity
+    vel =  v_scalar4*ofClamp(log(anchorPos.squareDistance(*currentPos)) - 3, 0, 1)*vel //influence of current velocity
                       + gradient/v_scalar1 //gradient
                       + (anchorDistance*(distLimSquared - anchorPos.squareDistance(*currentPos)))/v_scalar2 //force from anchor
                       + v_scalar3*noise; //noise

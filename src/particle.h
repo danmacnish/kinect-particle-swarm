@@ -35,8 +35,8 @@ class particle {
 public:
     //constructor, pass in x and y initial position and position limits
     particle(float x, float y, int xLimit, int yLimit);
-    //constructor, pass in x and y initial position and limits, and address to current position vector.
-    //Used if you want access to particle positions in a contiguous block of memory.
+    //constructor, pass in x and y initial position and limits, and address to position vector.
+    //Used if you want access to particle positions & sizes in a contiguous block of memory.
     particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos, ofVec3f& Size);
     //set methods
     void setGradientRadius(int val);

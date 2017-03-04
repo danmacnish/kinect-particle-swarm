@@ -37,7 +37,7 @@ public:
     int index = 0;
 
     //particles
-    const int numParticles = 200; //number of particles
+    const int numParticles = 1000; //number of particles
     vector<particle> particles;
     vector<ofVec2f> particlePositions;
     vector<ofVec3f> particleSizes;

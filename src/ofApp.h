@@ -4,6 +4,7 @@
 #include "ofxOpenCv.h"
 #include "particle.h"
 #include "ofxGui.h"
+#include "ofxKinect.h"
 #include <vector>
 
 class ofApp : public ofBaseApp{
@@ -12,7 +13,7 @@ public:
     void setup();
     void update();
     void draw();
-
+    void exit();
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
@@ -32,6 +33,11 @@ public:
     void velocityLimitChanged(float &val);
     void particleSizeChanged(float &val);
     void gradientRadiusChanged(float &val);
+    void nearClipChanged(float & val);
+    void farClipChanged(float & val);
+
+    ofxKinect kinect;
+    ofImage depthImage;
 
     vector<ofImage> images;
     int index = 0;
@@ -59,10 +65,18 @@ public:
     ofxFloatSlider gradientRadius;
     ofxFloatSlider velocityLimit;
     ofxFloatSlider particleSize;
+    ofxFloatSlider nearClip;
+    ofxFloatSlider farClip;
     bool drawKinectFrame; //sets whether to draw kinect depth data
     ofxPanel gui;
     
     //gif playback control
     bool paused;
+    
+    //angle of kinect
+    int angle;
+    
+    //load video from file or use live video from kinect
+    bool liveVideo;
 		
 };

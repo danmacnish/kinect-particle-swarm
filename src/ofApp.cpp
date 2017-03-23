@@ -14,6 +14,8 @@ void ofApp::setup(){
     
     //disable drawing the kinect frame
     drawKinectFrame = false;
+    //enable live video from kinect
+    liveVideo = true;
     
     // set the camera distance
     camDist  = 450;
@@ -30,6 +32,8 @@ void ofApp::setup(){
     velocityLimit.addListener(this, &ofApp::velocityLimitChanged);
     particleSize.addListener(this, &ofApp::particleSizeChanged);
     gradientRadius.addListener(this, &ofApp::gradientRadiusChanged);
+    nearClip.addListener(this, &ofApp::nearClipChanged);
+    farClip.addListener(this, &ofApp::farClipChanged);
     
     //init gui
     gui.setup("particle settings", "particle settings", 10, 100);
@@ -41,20 +45,44 @@ void ofApp::setup(){
     gui.add(velocityLimit.setup("velocity limit", 2.25, 1, 5));
     gui.add(particleSize.setup("particle size", 3, 1, 5));
     gui.add(gradientRadius.setup("gradient radius", 23, 1, 30));
+    //add slider to GUI for near clipping level, init slider to value of 500mm, range 500 to 4000
+    gui.add(nearClip.setup("near clipping", 500, 500, 4000));
+    //add slider to GUI for far clipping level, init slider to value of 500mm, range 500 to 4000
+    gui.add(farClip.setup("far clipping", 4000, 500, 4000));
     
-    //load the kinect frames in png format
-    string path = "kinect data/raw frames/frame";
+    //init kinect
+    kinect.init();
+    kinect.open();
     
-    //set video to paused
-    paused = true;
+    //log that we are connected
+    if(kinect.isConnected()) {
+        ofLogNotice() << "connected to Kinect";
+    } else {
+        ofLogNotice() << "failed to connect";
+    };
     
-    for(int i=0; i < 530; i++){
-        string filePath = path + to_string(i) + ".png";
-        images.push_back(ofImage());
-        images[i].allocate(640,480,OF_IMAGE_GRAYSCALE);
-        ofLoadImage(images[i].getPixels(), filePath);
-    }
-    ofLogNotice() << "loaded images";
+    //set angle of kinect
+    angle = 0;
+    kinect.setCameraTiltAngle(angle);
+    
+    //allocate mem for depth image
+    depthImage.allocate(kinect.width, kinect.height, OF_IMAGE_GRAYSCALE);
+    
+    //load the kinect frames in png format if live video is disabled
+    if(!liveVideo) {
+        string path = "kinect data/raw frames/frame";
+        
+        //set video to paused
+        paused = true;
+        
+        for(int i=0; i < 530; i++){
+            string filePath = path + to_string(i) + ".png";
+            images.push_back(ofImage());
+            images[i].allocate(640,480,OF_IMAGE_GRAYSCALE);
+            ofLoadImage(images[i].getPixels(), filePath);
+        }
+        ofLogNotice() << "loaded images";
+    };
     
     //init particle positions, do this first because .push_back() seems to change address of array elements & mess up particle.currentPosition
     for(auto i = 0; i < numParticles; ++i) {
@@ -84,15 +112,25 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    //index frames
-    if (ofGetElapsedTimeMillis() % 3 && !paused)
-    {
-        index++;
-        if (index > images.size()-1) index = 0;
+    
+    kinect.update();
+    
+    //if there is a new depth frame available
+    if(kinect.isFrameNewDepth()) {
+        //get the depth frame
+        depthImage.setFromPixels(kinect.getDepthPixels());
+    }
+    //index frames if not using kinect
+    if(!liveVideo ) {
+        if (ofGetElapsedTimeMillis() % 3 && !paused)
+        {
+            index++;
+            if (index > images.size()-1) index = 0;
+        }
     }
     //update particles
     for(auto it = particles.begin(); it != particles.end(); ++it) {
-        it->update(images[index]);
+        it->update(depthImage);
     }
     //update vbo vertices
     vbo.updateVertexData(&particlePositions[0], numParticles);
@@ -103,7 +141,7 @@ void ofApp::draw(){
     //draw the kinect frame if enabled
     if(drawKinectFrame) {
         ofSetColor(255, 255, 255);
-        images[index].draw(0, 0);
+        depthImage.draw(0, 0);
     }
     glDepthMask(GL_FALSE);
     ofSetColor(255, 255, 255); //set color to white
@@ -228,6 +266,28 @@ void ofApp::gradientRadiusChanged(float &val) {
         it->setGradientRadius(static_cast<int>(val));
     }
 }
+
+//-------------------------------------------------------------
+void ofApp::nearClipChanged(float & val) {
+    //set depth clipping. sets scale factor from raw depth data (12 bit) to grayscale (8 bit)
+    //i.e. setting a smaller depth range will increase depth resolution of grayscale image
+    kinect.setDepthClipping(val, farClip);
+    
+}
+
+//-------------------------------------------------------------
+void ofApp::farClipChanged(float & val) {
+    //set depth clipping. sets scale factor from raw depth data (12 bit) to grayscale (8 bit)
+    //i.e. setting a smaller depth range will increase depth resolution of grayscale image
+    kinect.setDepthClipping(nearClip, val);
+    
+}
+
+void ofApp::exit() {
+    kinect.setCameraTiltAngle(0);
+    kinect.close();
+}
+
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){

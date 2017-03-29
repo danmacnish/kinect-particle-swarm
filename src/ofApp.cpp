@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     //set OF log level
-    ofSetLogLevel(OF_LOG_WARNING);
+    ofSetLogLevel(OF_LOG_NOTICE);
     
     //set our background to black
     ofBackgroundHex(0x000000);
@@ -54,22 +54,20 @@ void ofApp::setup(){
     kinect.init();
     kinect.open();
     
-    //log that we are connected
+    //if kinect is connected, then set the angle, otherwise load images from file
     if(kinect.isConnected()) {
         ofLogNotice() << "connected to Kinect";
+        //set angle of kinect
+        angle = 0;
+        kinect.setCameraTiltAngle(angle);
+        
+        //allocate mem for depth image
+        depthImage.allocate(kinect.width, kinect.height, OF_IMAGE_GRAYSCALE);
     } else {
-        ofLogNotice() << "failed to connect";
-    };
-    
-    //set angle of kinect
-    angle = 0;
-    kinect.setCameraTiltAngle(angle);
-    
-    //allocate mem for depth image
-    depthImage.allocate(kinect.width, kinect.height, OF_IMAGE_GRAYSCALE);
-    
-    //load the kinect frames in png format if live video is disabled
-    if(!liveVideo) {
+        //set live video flag to false
+        liveVideo = false;
+        ofLogNotice() << "failed to connect, will load images from file instead";
+        //load the kinect frames in png format if live video is disabled
         string path = "kinect data/raw frames/frame";
         
         //set video to paused
@@ -81,8 +79,8 @@ void ofApp::setup(){
             images[i].allocate(640,480,OF_IMAGE_GRAYSCALE);
             ofLoadImage(images[i].getPixels(), filePath);
         }
-        ofLogNotice() << "loaded images";
-    };
+        ofLogNotice() << "loaded images from file";
+    }
     
     //init particle positions, do this first because .push_back() seems to change address of array elements & mess up particle.currentPosition
     for(auto i = 0; i < numParticles; ++i) {
@@ -112,28 +110,33 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
-    kinect.update();
-    
-    //if there is a new depth frame available
-    if(kinect.isFrameNewDepth()) {
-        //get the depth frame
-        depthImage.setFromPixels(kinect.getDepthPixels());
-    }
-    //index frames if not using kinect
-    if(!liveVideo ) {
+    if(liveVideo) {
+        kinect.update();
+        //if there is a new depth frame available
+        if(kinect.isFrameNewDepth()) {
+            //get the depth frame
+            depthImage.setFromPixels(kinect.getDepthPixels());
+        }
+        //update particles
+        for(auto it = particles.begin(); it != particles.end(); ++it) {
+            it->update(depthImage);
+        }
+        //update vbo vertices
+        vbo.updateVertexData(&particlePositions[0], numParticles);
+    } else {
+        //index frames if not using kinect
         if (ofGetElapsedTimeMillis() % 3 && !paused)
         {
             index++;
             if (index > images.size()-1) index = 0;
         }
+        //update particles
+        for(auto it = particles.begin(); it != particles.end(); ++it) {
+            it->update(images[index]);
+        }
+        //update vbo vertices
+        vbo.updateVertexData(&particlePositions[0], numParticles);
     }
-    //update particles
-    for(auto it = particles.begin(); it != particles.end(); ++it) {
-        it->update(depthImage);
-    }
-    //update vbo vertices
-    vbo.updateVertexData(&particlePositions[0], numParticles);
 }
 
 //--------------------------------------------------------------
@@ -141,7 +144,11 @@ void ofApp::draw(){
     //draw the kinect frame if enabled
     if(drawKinectFrame) {
         ofSetColor(255, 255, 255);
-        depthImage.draw(0, 0);
+        if(liveVideo) {
+            depthImage.draw(0, 0);
+        } else {
+            images[index].draw(0,0);
+        }
     }
     glDepthMask(GL_FALSE);
     ofSetColor(255, 255, 255); //set color to white

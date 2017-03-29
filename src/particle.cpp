@@ -31,7 +31,7 @@ particle::particle(float x, float y, int xLimit, int yLimit) : xLim(xLimit), yLi
     //calculate max distance from particle to anchor position. used to decay anchor force
     distLimSquared = pow(xLim, 2) + pow(yLim,2);
     v_scalar1 = 650; //scales gradient vector
-    v_scalar2 = 2000000; //scales distance from current position to anchor position
+    v_scalar2 = 4000000; //scales distance from current position to anchor position
     v_scalar3 = 0.06; //scales random noise
     v_scalar4 = 0.86; //effect of previous velocity on current velocity
 }
@@ -63,7 +63,7 @@ particle::particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos, ofVec
     //calculate max distance from particle to anchor position. used to decay anchor force
     distLimSquared = pow(xLim, 2) + pow(yLim,2);
     v_scalar1 = 650; //scales gradient vector
-    v_scalar2 = 2000000; //scales distance from current position to anchor position
+    v_scalar2 = 4000000; //scales distance from current position to anchor position
     v_scalar3 = 0.06; //scales random noise
     v_scalar4 = 0.86; //effect of previous velocity on current velocity
 }
@@ -90,7 +90,7 @@ void particle::update(const ofImage &image) {
     vel =  v_scalar4*ofClamp(log(anchorPos.squareDistance(*currentPos)) - 3, 0, 1)*vel //influence of current velocity
                       + gradient/v_scalar1 //gradient
                       + (anchorDistance*(distLimSquared - anchorPos.squareDistance(*currentPos)))/v_scalar2 //force from anchor
-                      + v_scalar3*noise; //noise
+                      + v_scalar3*noise*vel.lengthSquared(); //noise
     //limit velocity
     vel.limit(velLim);
     //update currentPosition

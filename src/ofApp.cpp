@@ -16,6 +16,8 @@ void ofApp::setup(){
     drawKinectFrame = false;
     //enable live video from kinect
     liveVideo = true;
+    //display the gui
+    hideGUI = false;
     
     // set the camera distance
     camDist  = 450;
@@ -182,15 +184,19 @@ void ofApp::draw(){
     //}
     
     glDepthMask(GL_TRUE);
-    //write framerate and other info to screen
-    stringstream ss;
-    ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
-    ss << "press r to reset particles" << endl;
-    ss << "press p to pause/unpause playback" << endl;
-    ss << "press d to draw kinect depth frame" << endl;
-    ofDrawBitmapString(ss.str().c_str(), 10, 20);
-    
-    gui.draw();
+    if(!hideGUI) {
+        //write framerate and other info to screen
+        stringstream ss;
+        ss << "Framerate: " << ofToString(ofGetFrameRate(),0) << "\n";
+        ss << "press r to reset particles" << endl;
+        ss << "press p to pause/unpause playback" << endl;
+        ss << "press d to draw kinect depth frame" << endl;
+        ss << "press up and down to zoom camera" << endl;
+        ss << "press h to hide this text & the gui panel" << endl;
+        ofDrawBitmapString(ss.str().c_str(), 10, 20);
+        //draw the gui panel
+        gui.draw();
+    }
 }
 
 //--------------------------------------------------------------
@@ -209,13 +215,17 @@ void ofApp::keyPressed(int key){
         //enable/disable drawing the kinect frame
         this->drawKinectFrame = !drawKinectFrame;
     }
-    if(key == OF_KEY_UP) {
+    else if(key == OF_KEY_UP) {
         camDist -= 10;
+        camera.setDistance(camDist);
     }
-    if(key == OF_KEY_DOWN) {
+    else if(key == OF_KEY_DOWN) {
         camDist += 10;
+        camera.setDistance(camDist);
     }
-    camera.setDistance(camDist);
+    else if(key == 'h') {
+        this->hideGUI = !hideGUI;
+    }
 }
 
 //--------------------------------------------------------------

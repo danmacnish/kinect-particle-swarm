@@ -68,6 +68,7 @@ public:
     ofxFloatSlider nearClip;
     ofxFloatSlider farClip;
     bool drawKinectFrame; //sets whether to draw kinect depth data
+    bool hideGUI; //hide or display the GUI
     ofxPanel gui;
     
     //gif playback control

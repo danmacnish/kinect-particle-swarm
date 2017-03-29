@@ -39,12 +39,12 @@ void ofApp::setup(){
     gui.setup("particle settings", "particle settings", 10, 100);
     //add slider for scalar 1, init slider to 0.5, range 0 to 20
     gui.add(scalar1.setup("gradient force", 650, 0, 2000));
-    gui.add(scalar2.setup("anchor force", 2000000, 0, 4000000));
+    gui.add(scalar2.setup("anchor force", 4000000, 1000000, 5000000));
     gui.add(scalar3.setup("random noise", 0.06, 0, 0.5));
     gui.add(scalar4.setup("current velocity", 0.86, 0, 1));
-    gui.add(velocityLimit.setup("velocity limit", 2.25, 1, 5));
+    gui.add(velocityLimit.setup("velocity limit", 5, 1, 10));
     gui.add(particleSize.setup("particle size", 3, 1, 5));
-    gui.add(gradientRadius.setup("gradient radius", 23, 1, 30));
+    gui.add(gradientRadius.setup("gradient radius", 23, 1, 80));
     //add slider to GUI for near clipping level, init slider to value of 500mm, range 500 to 4000
     gui.add(nearClip.setup("near clipping", 500, 500, 4000));
     //add slider to GUI for far clipping level, init slider to value of 500mm, range 500 to 4000

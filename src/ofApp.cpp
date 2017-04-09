@@ -44,7 +44,7 @@ void ofApp::setup(){
     gui.add(scalar2.setup("anchor force", 4000000, 1000000, 5000000));
     gui.add(scalar3.setup("random noise", 0.04, 0, 0.5));
     gui.add(scalar4.setup("current velocity", 0.86, 0, 1));
-    gui.add(velocityLimit.setup("velocity limit", 6, 1, 10));
+    gui.add(velocityLimit.setup("velocity limit", 5, 1, 10));
     gui.add(particleSize.setup("particle size", 3, 1, 5));
     gui.add(gradientRadius.setup("gradient radius", 23, 1, 80));
     //add slider to GUI for near clipping level, init slider to value of 500mm, range 500 to 4000

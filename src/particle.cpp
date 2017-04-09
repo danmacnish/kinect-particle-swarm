@@ -26,7 +26,7 @@ particle::particle(float x, float y, int xLimit, int yLimit) : xLim(xLimit), yLi
     noise.y = ofSignedNoise(uniqueVal, currentPos->x * 0.05, ofGetElapsedTimef() * 0.6);
     //set velocity to 0
     vel.set(0,0);
-    velLim = 2.25;
+    velLim = 5;
     gRadius = 23;
     //calculate max distance from particle to anchor position. used to decay anchor force
     distLimSquared = pow(xLim, 2) + pow(yLim,2);
@@ -58,7 +58,7 @@ particle::particle(float x, float y, int xLimit, int yLimit, ofVec2f& Pos, ofVec
     noise.y = ofSignedNoise(uniqueVal, currentPos->x * 0.05, ofGetElapsedTimef() * 0.6);
     //set velocity to 0
     vel.set(0,0);
-    velLim = 2.25;
+    velLim = 5;
     gRadius = 23;
     //calculate max distance from particle to anchor position. used to decay anchor force
     distLimSquared = pow(xLim, 2) + pow(yLim,2);
